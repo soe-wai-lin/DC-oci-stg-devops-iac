@@ -1069,7 +1069,6 @@ jobs:
           name: rm_outputs
           path: rm_outputs.json
 
-
   create_stg_prometheus_lb_service:
     name: Create OKE LoadBalancer Service
     runs-on: ubuntu-latest
