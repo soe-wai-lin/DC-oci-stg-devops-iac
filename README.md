@@ -15,7 +15,7 @@
     - Prod VCN
         - All subnets, Network Security Group, security list, route tables,etc
 
-## VCN, Subnet and IP
+<!-- ## VCN, Subnet and IP
 
 VCN_NAME = **prod** 
 
@@ -39,7 +39,7 @@ VCN_CIDR = **10.10.0.0/16**
 
 9. private_k8s_api_endpoint_subnet = **( 10.10.60.0/24 )**
 
-10. private_lb_subnet = **( 10.10.55.0/24 )**
+10. private_lb_subnet = **( 10.10.55.0/24 )** -->
 
 
 ## Notifications
@@ -86,7 +86,7 @@ VCN_CIDR = **10.10.0.0/16**
 
 ## OKE Architecture
 
-![GHA WorkFlow](images/OCI-OKE-Architecture.png)
+<!-- ![GHA WorkFlow](images/OCI-OKE-Architecture.png) -->
 
 1. Bastionhost can access every cluster
 2. Bastionhost can access ssh connection to all worker nodes.
