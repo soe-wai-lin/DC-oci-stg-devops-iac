@@ -1302,7 +1302,7 @@ jobs:
         run: |
           export KUBECONFIG="$HOME/.kube/config"
 
-          kubectl create namespace monitoring  ## creating monitoring namespace 
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
           # Skip prometheus install if release already exists
           if helm status kube-prometheus-stack -n monitoring > /dev/null 2>&1; then
