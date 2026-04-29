@@ -1340,6 +1340,7 @@ jobs:
             type: LoadBalancer
             selector:
               app.kubernetes.io/name: prometheus
+              app.kubernetes.io/instance: kube-prometheus-stack-prometheus
             ports:
               - name: http
                 port: 9090
