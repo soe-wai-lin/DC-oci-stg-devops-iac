@@ -2,44 +2,44 @@
 
 ## Compartments
 
-1. Prod-mgmt-comp
+1. mgmt
     - log analytics, log group, key vault, etc
 
-2. Prod-app-comp
+2. app
     - OKE, workers nodes, Instances, etc
 
-3. Prod-data-comp
+3. data
     - Database, Redis, Block Storage, etc
 
-4. Prod-net-comp
-    - Prod VCN
+4. network
+    - STG VCN
         - All subnets, Network Security Group, security list, route tables,etc
 
-<!-- ## VCN, Subnet and IP
+## VCN, Subnet and IP
 
-VCN_NAME = **prod** 
+VCN_NAME = **stg** 
 
-VCN_CIDR = **10.10.0.0/16**
+VCN_CIDR = **10.30.0.0/16**
 
-1. public_lb_subnet = **( 10.10.0.0/24 )**
+1. public_lb_subnet = **( 10.30.0.0/24 )**
 
-2. cms_oke_woker_subnet = **( 10.10.16.0/20 )**
+<!-- 2. cms_oke_woker_subnet = **( 10.10.16.0/20 )**
 
 3. cms_oke_pod_subnet = **( 10.10.128.0/20 )**
 
 4. web_oke_worker_subnet = **( 10.10.30.0/20 )**
 
-5. web_oke_pod_subnet = **( 10.10.112.0/20 )**
+5. web_oke_pod_subnet = **( 10.10.112.0/20 )** -->
 
-6. airs_microservice_oke_worker_subnet = **( 10.10.96.0/20 )**
+2. worker_subnet = **( 10.30.96.0/20 )**
 
-7. airs_microservice_pod_subnet = **( 10.10.144.0/20 )**
+3. pod_subnet = **( 10.30.144.0/20 )**
 
-8. db_subnet = **( 10.10.80.0/24 )**
+4. db_subnet = **( 10.30.80.0/24 )**
 
-9. private_k8s_api_endpoint_subnet = **( 10.10.60.0/24 )**
+5. private_k8s_api_endpoint_subnet = **( 10.30.60.0/24 )**
 
-10. private_lb_subnet = **( 10.10.55.0/24 )** -->
+6. private_lb_subnet = **( 10.10.55.0/24 )**
 
 
 ## Notifications
@@ -77,7 +77,7 @@ VCN_CIDR = **10.10.0.0/16**
 
 ***In Environments*** need to create this environment for reviewer and approver process
 
-**prod-oci-infra-apply** 
+**stg-oci-infra-apply** 
 
 ## Example of create OCI Resource Manger Configuration Source Providers and Stack
 

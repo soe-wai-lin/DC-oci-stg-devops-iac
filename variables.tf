@@ -589,7 +589,7 @@ variable "airs_worker_node_min_count" {
 
 variable "airs_worker_node_max_count" {
   type    = number
-  default = 10
+  default = 30
 }
 
 variable "airs_cluster_autoscaler_num_replicas" {
