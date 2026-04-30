@@ -263,7 +263,7 @@ jobs:
               exit 0
             elif [ "${STATUS}" = "FAILED" ] || [ "${STATUS}" = "CANCELED" ]; then
               echo "Apply job failed or was canceled."
-              oci resource-manager job get --job-id "${APPLY_JOB_ID}"
+              oci resource-manager job get --region ap-singapore-1 --job-id "${APPLY_JOB_ID}"
               exit 1
             fi
 
