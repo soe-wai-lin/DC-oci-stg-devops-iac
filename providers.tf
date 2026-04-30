@@ -14,7 +14,7 @@ provider "oci" {
   alias = "home"
 }
 
-provider "oci" {
-  region = var.target_region
-  alias = "target"
-}
+# provider "oci" {
+#   region = var.target_region
+#   alias = "target"
+# }
