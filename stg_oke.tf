@@ -446,3 +446,11 @@ resource "oci_containerengine_addon" "airs_cluster_autoscaler" {
 
 
 
+
+
+
+
+
+
+
+
