@@ -508,35 +508,35 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_
     }
   }
 }
-# resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_all" {
-#   network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
-#   direction                 = "INGRESS"
-#   protocol                  = "1"
-#   source                    = "0.0.0.0/0"
-#   source_type               = "CIDR_BLOCK"
-#   description               = "LB or anywhere to worker"
-#   tcp_options {
-#     destination_port_range {
-#       min = 30000
-#       max = 32767
-#     }
-#   }
-# }
-# resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_lb" {
-#   network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
-#   direction                 = "INGRESS"
-#   protocol                  = "6"
-#   # source                    = "10.10.0.0/24"
-#   source = var.lb_subnet_cidr
-#   source_type               = "CIDR_BLOCK"
-#   description               = "Allow OCI load balancer or network load balancer to communicate with kube-proxy on worker nodes."
-#   tcp_options {
-#     destination_port_range {
-#       min = 10256
-#       max = 10256
-#     }
-#   }
-# }
+resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_all_from_anywhere" {
+  network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
+  direction                 = "INGRESS"
+  protocol                  = "1"
+  source                    = "0.0.0.0/0"
+  source_type               = "CIDR_BLOCK"
+  description               = "LB or anywhere to worker"
+  tcp_options {
+    destination_port_range {
+      min = 30000
+      max = 32767
+    }
+  }
+}
+resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_lb" {
+  network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
+  direction                 = "INGRESS"
+  protocol                  = "6"
+  # source                    = "10.10.0.0/24"
+  source = var.lb_subnet_cidr
+  source_type               = "CIDR_BLOCK"
+  description               = "Allow OCI load balancer or network load balancer to communicate with kube-proxy on worker nodes."
+  tcp_options {
+    destination_port_range {
+      min = 10256
+      max = 10256
+    }
+  }
+}
 resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_icmp_from_bastion" {
   network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
   direction                 = "INGRESS"
