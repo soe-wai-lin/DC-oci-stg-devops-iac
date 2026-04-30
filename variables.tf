@@ -14,7 +14,7 @@ variable "target_region" {
 
 variable "compartment_id" {
   default     = "ocid1.compartment.oc1..aaaaaaaaunnn7vontolwxh5ckprtwb3c5sqohfjgo2pk2wpw6bwrrqupo7ga"
-  description = "staging compartment"
+  description = "staging compartment, this compartment id will be used to create subcompartment like app, data, mgmt, network"
 }
 
 variable "vcn_display_name" {
