@@ -116,6 +116,7 @@ jobs:
 
           for i in {1..120}; do
             STATUS=$(oci resource-manager job get \
+              --region ap-singapore-1 \
               --job-id "${PLAN_JOB_ID}" \
               --query 'data."lifecycle-state"' \
               --raw-output)
