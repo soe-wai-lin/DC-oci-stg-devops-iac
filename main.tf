@@ -508,20 +508,20 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_
     }
   }
 }
-resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_all" {
-  network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
-  direction                 = "INGRESS"
-  protocol                  = "1"
-  source                    = "0.0.0.0/0"
-  source_type               = "CIDR_BLOCK"
-  description               = "LB or anywhere to worker"
-  tcp_options {
-    destination_port_range {
-      min = 30000
-      max = 32767
-    }
-  }
-}
+# resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_all" {
+#   network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
+#   direction                 = "INGRESS"
+#   protocol                  = "1"
+#   source                    = "0.0.0.0/0"
+#   source_type               = "CIDR_BLOCK"
+#   description               = "LB or anywhere to worker"
+#   tcp_options {
+#     destination_port_range {
+#       min = 30000
+#       max = 32767
+#     }
+#   }
+# }
 # resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_ingress_lb" {
 #   network_security_group_id = oci_core_network_security_group.nsg_prod_airs.id
 #   direction                 = "INGRESS"
