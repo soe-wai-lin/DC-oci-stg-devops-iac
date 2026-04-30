@@ -1,4 +1,4 @@
-name: OCI Resource Manager Manual Apply
+name: OCI Resource Manager Apply
 
 on:
   # workflow_dispatch:
@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   plan:
-    name: Create PROD OCI Infra Resource Manager Plan
+    name: Create STG OCI Infra Resource Manager Plan
     runs-on: ubuntu-latest
     ## We can use Job level output to carry different job level, but if this output include sensitive datas like secrets,
     ## Cannot carry this output to different job. That's why in this case, use upload "plan_job_id" in Plan Job , and 
@@ -155,17 +155,9 @@ jobs:
 
 
   apply:
-    name: Manual approval and PROD Infra OCI Resource Manager Apply
+    name: STG Infra OCI Resource Manager Apply
     runs-on: ubuntu-latest
     needs: plan
-
-
-    # outputs:
-    #   oke_cluster_ocid: ${{ steps.get_rm_outputs.outputs.oke_cluster_ocid }}
-    #   lb_subnet_ocid: ${{ steps.get_rm_outputs.outputs.lb_subnet_ocid }}
-    #   lb_nsg_ocid: ${{ steps.get_rm_outputs.outputs.lb_nsg_ocid }}
-    #   lb_reserved_public_ip_ocid: ${{ steps.get_rm_outputs.outputs.lb_reserved_public_ip_ocid }}
-
 
     # This environment must be created in GitHub repo settings
     # and configured with Required reviewers for manual approval.
@@ -1350,6 +1342,28 @@ jobs:
           cat prometheus-lb-service.yaml
           kubectl apply -f prometheus-lb-service.yaml
           kubectl -n monitoring get svc prometheus-lb -o wide
+
+      - name: Install NGINX Ingress Controller
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
+
+          # Add repo if not already added
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+          helm repo update
+
+          # Skip install if already exists
+          if helm status ingress-nginx -n ingress-nginx > /dev/null 2>&1; then
+            echo "ingress-nginx already installed, skipping..."
+          else
+            echo "Installing ingress-nginx..."
+
+            helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+            --namespace ingress-nginx \
+            --set controller.service.type=LoadBalancer \
+            --set controller.publishService.enabled=true
+          fi
 
 
 
