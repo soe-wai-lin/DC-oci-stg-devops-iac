@@ -256,7 +256,6 @@
 # #   value = oci_vn_monitoring_path_analyzer_test.cms_pod_to_redis_subnet_connectivity.id
 # # }
 
-
 # # ################
 # # ##    OKE    ###
 # # ################
