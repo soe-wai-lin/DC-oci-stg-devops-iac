@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   plan:
-    name: Create STG OCI Infra Resource Manager Plan
+    name: STG OCI Infra Resource Manager Plan
     runs-on: ubuntu-latest
     ## We can use Job level output to carry different job level, but if this output include sensitive datas like secrets,
     ## Cannot carry this output to different job. That's why in this case, use upload "plan_job_id" in Plan Job , and 
@@ -1062,7 +1062,7 @@ jobs:
           path: rm_outputs.json
 
   create_stg_prometheus_lb_service:
-    name: Create OKE LoadBalancer Service
+    name: STG Prometheus LoadBalancer
     runs-on: ubuntu-latest
     needs: apply
 
@@ -1343,27 +1343,47 @@ jobs:
           kubectl apply -f prometheus-lb-service.yaml
           kubectl -n monitoring get svc prometheus-lb -o wide
 
-      - name: Install NGINX Ingress Controller
+      - name: Install NGINX Gateway Fabric
         run: |
           export KUBECONFIG="$HOME/.kube/config"
 
-          kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create namespace nginx-gateway --dry-run=client -o yaml | kubectl apply -f -
 
-          # Add repo if not already added
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
-          helm repo update
+          # Install Gateway API CRDs (safe re-apply)
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 
-          # Skip install if already exists
-          if helm status ingress-nginx -n ingress-nginx > /dev/null 2>&1; then
-            echo "ingress-nginx already installed, skipping..."
+          # Install Helm chart (skip if exists)
+          if helm status ngf -n nginx-gateway > /dev/null 2>&1; then
+             echo "NGINX Gateway Fabric already installed, skipping..."
           else
-            echo "Installing ingress-nginx..."
-
-            helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-            --namespace ingress-nginx \
-            --set controller.service.type=LoadBalancer \
-            --set controller.publishService.enabled=true
+            echo "Installing NGINX Gateway Fabric..."
+            helm upgrade --install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
+              --namespace nginx-gateway \
+              --set service.type=LoadBalancer \
+              --set gatewayClass.name=nginx
           fi
+
+      # - name: Install NGINX Ingress Controller
+      #   run: |
+      #     export KUBECONFIG="$HOME/.kube/config"
+
+      #     kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
+
+      #     # Add repo if not already added
+      #     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+      #     helm repo update
+
+      #     # Skip install if already exists
+      #     if helm status ingress-nginx -n ingress-nginx > /dev/null 2>&1; then
+      #       echo "ingress-nginx already installed, skipping..."
+      #     else
+      #       echo "Installing ingress-nginx..."
+
+      #       helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+      #       --namespace ingress-nginx \
+      #       --set controller.service.type=LoadBalancer \
+      #       --set controller.publishService.enabled=true
+      #     fi
 
 
 
