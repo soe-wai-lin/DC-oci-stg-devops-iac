@@ -13,7 +13,7 @@ variable "target_region" {
 
 
 variable "compartment_id" {
-  default     = "ocid1.compartment.oc1..aaaaaaaarfcxj755zm6namwjijmg426pve3qlqrtfls6egmutvemkm2vvloa"
+  default     = "ocid1.compartment.oc1..aaaaaaaaunnn7vontolwxh5ckprtwb3c5sqohfjgo2pk2wpw6bwrrqupo7ga"
   description = "staging compartment"
 }
 
@@ -148,7 +148,7 @@ variable "alert_email" {
 variable "tenancy_ocid" {
   description = "Tenancy OCID (needed to query Availability Domains)."
   type        = string
-  default     = "ocid1.tenancy.oc1..aaaaaaaatqwblz7zyqmzal6265vaijaqiwfmqejptj5zh7dhnornymkvlina"
+  default     = "ocid1.tenancy.oc1..aaaaaaaaypiggoy7fnooykgwthklvkettgl7arlgyab5lvj67xykehcnipxq"
 }
 
 variable "ssh_public_key" {
