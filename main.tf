@@ -636,6 +636,7 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_airs_engress_
   description      = "Allow nodes to communicate with OKE."
 }
 
+
 ####################
 ### AIRS POD NSG ####
 ####################
