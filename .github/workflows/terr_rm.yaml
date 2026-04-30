@@ -180,7 +180,6 @@ jobs:
           OCI_REGION: ${{ secrets.OCI_REGION }}
           OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
           OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
-          OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
         run: |
           mkdir -p ~/.oci
           chmod 700 ~/.oci
@@ -194,7 +193,6 @@ jobs:
           tenancy=${OCI_TENANCY_OCID}
           region=${OCI_REGION}
           fingerprint=${OCI_FINGERPRINT}
-          # pass_phrase=${OCI_PRIVATE_KEY_PASSPHRASE}
           key_file=${HOME}/.oci/oci_api_key.pem
           EOF
 
@@ -230,6 +228,7 @@ jobs:
 
           APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
             --stack-id "${STACK_ID}" \
+            --region ap-singapore-1 \
             --execution-plan-strategy FROM_PLAN_JOB_ID \
             --execution-plan-job-id "${PLAN_JOB_ID}" \
             --display-name "gha-apply-${GITHUB_RUN_NUMBER}" \
@@ -252,6 +251,7 @@ jobs:
 
           for i in {1..180}; do
             STATUS=$(oci resource-manager job get \
+              --region ap-singapore-1 \
               --job-id "${APPLY_JOB_ID}" \
               --query 'data."lifecycle-state"' \
               --raw-output)
@@ -282,6 +282,7 @@ jobs:
           set -euo pipefail
 
           oci resource-manager job-output-summary list-job-outputs \
+          --region ap-singapore-1 \
           --job-id "${APPLY_JOB_ID}" \
           --all \
           --output json > rm_outputs.json
