@@ -128,6 +128,9 @@ variable "nsg_redis" {
 variable "nsg_k8s_api_endpoint" {
   default = "nsg-stg-k8s-api-endpoint"
 }
+variable "nsg_airs_pod" {
+  default = "nsg-stg-pod"
+}
 
 # variable "nsg_web_pod" {
 #   default = "nsg-stg-web-pod"
@@ -136,11 +139,6 @@ variable "nsg_k8s_api_endpoint" {
 # variable "nsg_cms_pod" {
 #   default = "nsg-stg-cms-pod"
 # }
-
-variable "nsg_airs_pod" {
-  default = "nsg-stg-pod"
-}
-
 
 # variable "alert_email" {
 #   type = list(string)
@@ -152,8 +150,9 @@ variable "nsg_airs_pod" {
 variable "alert_email_1" {
   default = "wailin.s@trinitywizards.com"
 }
+
 variable "alert_email_2" {
-  default = "09soewailynn@gmail.com"
+  default = "v.wong@trinitywizards.com"
 }
 
 
