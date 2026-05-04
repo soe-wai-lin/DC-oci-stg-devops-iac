@@ -550,7 +550,7 @@ variable "airs_system_ocpus" {
 }
 
 variable "airs_system_availability_domain" {
-  default = "aluk:AP-SINGAPORE-1-AD-1"
+  default = "kHij:AP-SINGAPORE-1-AD-1"
 }
 
 #########################
@@ -570,7 +570,7 @@ variable "airs_worker_node_count" {
 }
 
 variable "airs_worker_availability_domain" {
-  default = "aluk:AP-SINGAPORE-1-AD-1"
+  default = "kHij:AP-SINGAPORE-1-AD-1"
 }
 
 variable "airs_worker_node_shape" {
