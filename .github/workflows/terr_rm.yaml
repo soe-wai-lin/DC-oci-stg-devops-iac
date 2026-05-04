@@ -1138,7 +1138,6 @@ jobs:
           tenancy=${OCI_TENANCY_OCID}
           region=${OCI_REGION}
           fingerprint=${OCI_FINGERPRINT}
-          pass_phrase=${OCI_PRIVATE_KEY_PASSPHRASE}
           key_file=${HOME}/.oci/oci_api_key.pem
           EOF
 
@@ -1157,7 +1156,6 @@ jobs:
           ENDPOINT=$(oci ce cluster get \
             --cluster-id "$STG_OKE_CLUSTER_OCID" \
             --region ap-singapore-1 \
-            # --region "$OCI_REGION" \
             | jq -r '.data.endpoints."private-endpoint"')
 
           if [[ -z "$ENDPOINT" || "$ENDPOINT" == "null" ]]; then
@@ -1207,7 +1205,6 @@ jobs:
             --cluster-id "${STG_OKE_CLUSTER_OCID}" \
             --file "$HOME/.kube/config" \
             --region ap-singapore-1 \
-            # --region "${OCI_REGION}" \
             --token-version 2.0.0 \
             --kube-endpoint PRIVATE_ENDPOINT \
             --overwrite
