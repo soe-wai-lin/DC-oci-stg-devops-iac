@@ -1156,7 +1156,8 @@ jobs:
 
           ENDPOINT=$(oci ce cluster get \
             --cluster-id "$STG_OKE_CLUSTER_OCID" \
-            --region "$OCI_REGION" \
+            --region ap-singapore-1 \
+            # --region "$OCI_REGION" \
             | jq -r '.data.endpoints."private-endpoint"')
 
           if [[ -z "$ENDPOINT" || "$ENDPOINT" == "null" ]]; then
@@ -1205,7 +1206,8 @@ jobs:
           oci ce cluster create-kubeconfig \
             --cluster-id "${STG_OKE_CLUSTER_OCID}" \
             --file "$HOME/.kube/config" \
-            --region "${OCI_REGION}" \
+            --region ap-singapore-1 \
+            # --region "${OCI_REGION}" \
             --token-version 2.0.0 \
             --kube-endpoint PRIVATE_ENDPOINT \
             --overwrite
