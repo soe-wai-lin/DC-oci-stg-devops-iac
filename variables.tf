@@ -146,7 +146,8 @@ variable "alert_email" {
   type = list(string)
   default = [
     "v.wong@trinitywizards.com",
-    "wailin.s@trinitywizards.com"
+    "wailin.s@trinitywizards.com",
+    "09soewailynn@gmail.com"
   ]
 }
 
