@@ -62,9 +62,14 @@ output "alert_name" {
   value = oci_ons_notification_topic.network_alert_topic.name
 }
 
-output "alert_mail" {
-  value = oci_ons_subscription.email_subscription.endpoint
+output "alert_mail_status" {
+  value = {
+    for email, sub in oci_ons_subscription.email_subscription :
+    email => sub.lifecycle_state
+  }
 }
+
+
 
 
 ####################
