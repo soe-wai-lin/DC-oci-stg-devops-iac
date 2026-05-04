@@ -168,7 +168,6 @@ variable "ssh_public_key" {
   default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMMNtwjmuKJ2sZgOm6hFTD0Vu2LVyR9ac72w5uyiRe8U swl@swl"
 }
 
-
 variable "net_comp" {
   default = "network"
 }
