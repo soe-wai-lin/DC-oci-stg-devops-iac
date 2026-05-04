@@ -3,6 +3,7 @@
 # Creates an ENHANCED or BASIC OKE cluster with a PRIVATE API endpoint.
 #########################################
 resource "oci_containerengine_cluster" "stg_oke" {
+  provider = oci.resource
   compartment_id     = oci_identity_compartment.app_compartment.id
   name               = var.airs_cluster_name
   kubernetes_version = var.airs_kubernetes_version
@@ -67,6 +68,7 @@ resource "oci_containerengine_cluster" "stg_oke" {
 # Use "all" so Terraform can evaluate at plan time.
 #########################################
 data "oci_containerengine_node_pool_option" "airs_all_options" {
+  provider = oci.resource
   node_pool_option_id = "all"
   compartment_id      = oci_identity_compartment.app_compartment.id
 }
@@ -128,6 +130,7 @@ locals {
 # Intended for platform/system workloads.
 #########################################
 resource "oci_containerengine_node_pool" "airs_system" {
+  provider = oci.resource
   cluster_id         = oci_containerengine_cluster.stg_oke.id
   compartment_id     = oci_identity_compartment.app_compartment.id
   name               = var.airs_system_node_pool_name
@@ -213,6 +216,7 @@ resource "oci_containerengine_node_pool" "airs_system" {
 # Intended for platform/worker workloads.
 #########################################
 resource "oci_containerengine_node_pool" "airs_worker" {
+  provider = oci.resource
   cluster_id         = oci_containerengine_cluster.stg_oke.id
   compartment_id     = oci_identity_compartment.app_compartment.id
   name               = var.airs_worker_node_pool_name
