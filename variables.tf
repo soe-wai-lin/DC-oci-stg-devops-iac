@@ -4,6 +4,10 @@
 
 
 variable "home_region" {
+  default = "ap-sydney-1"
+}
+
+variable "resource_region" {
   default = "ap-singapore-1"
 }
 
