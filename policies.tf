@@ -5,6 +5,7 @@
 
 resource "oci_identity_policy" "reserved-alb-ip-different-comp-policy" {
   # Attach at tenancy/root
+  provider = oci.home
   compartment_id = var.tenancy_ocid
 
   name        = "${var.vcn_display_name}-reserved-alb-ip-different-comp-policy"
@@ -43,6 +44,7 @@ resource "oci_identity_policy" "reserved-alb-ip-different-comp-policy" {
 
 resource "oci_identity_policy" "allow-manage-vn-analyzer" {
   # Attach at tenancy/root
+  provider = oci.home
   compartment_id = var.tenancy_ocid
 
   name        = "${var.vcn_display_name}-allow-manage-vn-analyzer"
@@ -65,6 +67,7 @@ resource "oci_identity_policy" "allow-manage-vn-analyzer" {
 
 resource "oci_identity_policy" "allow-create-oke-vnic-in-different-comp" {
   # Attach at tenancy/root
+  provider = oci.home
   compartment_id = var.tenancy_ocid
 
   name        = "${var.vcn_display_name}-allow-create-oke-vnic-in-different-comp"
@@ -83,6 +86,7 @@ resource "oci_identity_policy" "allow-create-oke-vnic-in-different-comp" {
 
 resource "oci_identity_policy" "manage_cert_in_comp" {
   # Attach at tenancy/root
+  provider = oci.home
   compartment_id = var.tenancy_ocid
 
   name        = "${var.vcn_display_name}-to-manage-cert-in-comp"
@@ -99,6 +103,7 @@ resource "oci_identity_policy" "manage_cert_in_comp" {
 #######################################
 resource "oci_identity_policy" "manage-nsg-by-oke" {
   # Attach at tenancy/root
+  provider = oci.home
   compartment_id = var.tenancy_ocid
 
   name        = "${var.vcn_display_name}-manage-nsg-by-oke"
