@@ -1,6 +1,7 @@
 resource "oci_ons_notification_topic" "network_alert_topic" {
   compartment_id = oci_identity_compartment.net_compartment.id
   name           = "network_changes_alert"
+  freeform_tags           = var.freeform_tags
 }
 
 resource "oci_ons_subscription" "email_subscription" {
@@ -13,6 +14,7 @@ resource "oci_ons_subscription" "email_subscription" {
   # lifecycle {
   #   ignore_changes = [state, etag]
   # }
+  freeform_tags           = var.freeform_tags
 }
 
 resource "oci_events_rule" "network_security_change_rule" {

@@ -145,8 +145,8 @@ variable "nsg_airs_pod" {
 variable "alert_email" {
   type = list(string)
   default = [
-    "wailin.s@trinitywizards.com",
-    "v.wong@trinitywizards.com"
+    "v.wong@trinitywizards.com",
+    "wailin.s@trinitywizards.com"
   ]
 }
 
