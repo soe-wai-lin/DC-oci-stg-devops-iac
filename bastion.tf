@@ -67,7 +67,6 @@
 #   freeform_tags = merge(var.freeform_tags, {
 #     role = "bastion"
 #   })
-
 #   shape_config {
 #     ocpus         = var.bastion_shape_ocpus
 #     memory_in_gbs = var.bastion_shape_memory_in_gbs
