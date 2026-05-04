@@ -412,7 +412,7 @@ variable "gfhost_image_operating_system_version" {
 variable "gfhost_instance_shape" {
   description = "Compute shape for the Grafana host."
   type        = string
-  default     = "VM.Standard.E5.Flex"
+  default     = "VM.Standard.A1.Flex"
 }
 
 # variable "gfhost_availability_domain" {
@@ -428,7 +428,7 @@ variable "gfhost_shape_is_flex" {
 variable "gfhost_shape_ocpus" {
   description = "OCPUs for Grafana Flex shape."
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "gfhost_shape_memory_in_gbs" {
