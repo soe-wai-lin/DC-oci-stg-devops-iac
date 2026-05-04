@@ -145,11 +145,17 @@ variable "nsg_airs_pod" {
 variable "alert_email" {
   type = list(string)
   default = [
-    "v.wong@trinitywizards.com",
     "wailin.s@trinitywizards.com",
     "09soewailynn@gmail.com"
   ]
 }
+# variable "alert_email_1" {
+#   default = "wailin.s@trinitywizards.com"
+# }
+# variable "alert_email_2" {
+#   default = "09soewailynn@gmail.com"
+# }
+
 
 variable "tenancy_ocid" {
   description = "Tenancy OCID (needed to query Availability Domains)."

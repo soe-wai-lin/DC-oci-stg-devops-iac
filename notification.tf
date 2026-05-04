@@ -6,22 +6,30 @@ resource "oci_ons_notification_topic" "network_alert_topic" {
 
 resource "oci_ons_subscription" "email_subscription" {
   depends_on = [ oci_ons_notification_topic.network_alert_topic ]
-  for_each = toset(var.alert_email)
+  for_each = var.alert_email
   compartment_id = oci_identity_compartment.net_compartment.id
   endpoint       = each.value
+#   endpoint = var.alert_email_1
   protocol       = "EMAIL"
   topic_id       = oci_ons_notification_topic.network_alert_topic.id
-  # lifecycle {
-  #   ignore_changes = [state, etag]
-  # }
   freeform_tags           = var.freeform_tags
 }
+# resource "oci_ons_subscription" "email_subscription_2" {
+#   depends_on = [ oci_ons_notification_topic.network_alert_topic ]
+# #   for_each = toset(var.alert_email)
+#   compartment_id = oci_identity_compartment.net_compartment.id
+#   endpoint       = var.
+#   protocol       = "EMAIL"
+#   topic_id       = oci_ons_notification_topic.network_alert_topic.id
+#   freeform_tags           = var.freeform_tags
+# }
 
 resource "oci_events_rule" "network_security_change_rule" {
 
   compartment_id = oci_identity_compartment.net_compartment.id
   display_name   = "network-Infra-change-detection"
   is_enabled     = true
+  freeform_tags           = var.freeform_tags
 
   condition = jsonencode({
     "eventType": [
