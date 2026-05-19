@@ -284,6 +284,17 @@ output "stg_lb_reserved_public_ip_ocid" {
   description = "AIRS Reserved public IP OCID for the OKE load balancer"
   value       = oci_core_public_ip.airs_cluster_lb_reserved_ip.ip_address
 }
+
+output "oke_worker_node_image_id" {
+  value = local.airs_worker_node_image_id
+  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+}
+
+output "oke_system_node_image_id" {
+  value = local.airs_system_node_image_id
+  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+}
+
 # # output "cms_oke_cluster_ocid" {
 # #   description = "CMS OKE cluster OCID"
 # #   value       = oci_containerengine_cluster.cms_oke.id

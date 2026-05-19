@@ -167,7 +167,8 @@ resource "oci_containerengine_node_pool" "airs_system" {
   }
 
   node_source_details {
-    image_id    = local.airs_system_node_image_id
+    # image_id    = local.airs_system_node_image_id
+    image_id    = var.airs_system_node_image_id
     source_type = "IMAGE"
   }
 
@@ -248,7 +249,8 @@ resource "oci_containerengine_node_pool" "airs_worker" {
   }
 
   node_source_details {
-    image_id    = local.airs_worker_node_image_id
+    # image_id    = local.airs_worker_node_image_id
+    image_id    = var.airs_worker_node_image_id
     source_type = "IMAGE"
   }
 

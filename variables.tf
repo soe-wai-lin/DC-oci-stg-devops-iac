@@ -566,9 +566,17 @@ variable "airs_system_availability_domain" {
   default = "kHij:AP-SINGAPORE-1-AD-1"
 }
 
+variable "airs_system_node_image_id" {
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaazhczlmpeuyd23hlyebaf5qoxmlmi7ugc2uyw2zkdmhr5rwgocaga"
+}
+
 #########################
 # AIRS Worker node pool  #
 #########################
+
+variable "airs_worker_node_image_id" {
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaazhczlmpeuyd23hlyebaf5qoxmlmi7ugc2uyw2zkdmhr5rwgocaga"
+}
 
 variable "airs_worker_node_pool_name" {
   description = "Name of the worker node pool."
