@@ -57,7 +57,7 @@ resource "oci_core_instance" "gfhost" {
     source_type             = "image"
 
     # source_id = local.gfhost_image_id
-    source_id = var.
+    source_id = var.gfhost_image_id
     boot_volume_size_in_gbs = var.gfhost_boot_volume_size_in_gbs
   }
 

@@ -42,8 +42,8 @@ locals {
 
 resource "oci_core_instance" "bastion" {
   compartment_id      = oci_identity_compartment.app_compartment.id
-  availability_domain = var.bastion_availability_domain
-  # availability_domain = local.ad_name
+  # availability_domain = var.bastion_availability_domain
+  availability_domain = local.ad_name
   display_name        = "${var.vcn_display_name}-bastion-host"
   shape               = var.bastion_instance_shape
 

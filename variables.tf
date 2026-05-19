@@ -413,6 +413,10 @@ variable "gfhost_image_operating_system" {
   type    = string
 }
 
+variable "gfhost_image_id" {
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatwarx3672d5l35oyynk3vnngu6xdgbpuwez353tmmfyc4rd2a5ja"
+}
+
 variable "gfhost_image_operating_system_version" {
   default = "9"
   type    = string
