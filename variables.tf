@@ -370,6 +370,10 @@ variable "bastion_shape_is_flex" {
   default     = true
 }
 
+variable "bastion_image_id" {
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatwarx3672d5l35oyynk3vnngu6xdgbpuwez353tmmfyc4rd2a5ja"
+}
+
 variable "bastion_shape_ocpus" {
   description = "OCPUs for bastion Flex shape."
   type        = number
