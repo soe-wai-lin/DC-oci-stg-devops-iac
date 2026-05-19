@@ -360,9 +360,9 @@ variable "bastion_instance_shape" {
   default     = "VM.Standard.A1.Flex"
 }
 
-# variable "bastion_availability_domain" {
-#   default = "aluk:AP-SINGAPORE-1-AD-1"
-# }
+variable "bastion_availability_domain" {
+  default = "kHij:AP-SINGAPORE-1-AD-1"
+}
 
 variable "bastion_shape_is_flex" {
   description = "Set to true when using a Flex shape for the bastion host."
