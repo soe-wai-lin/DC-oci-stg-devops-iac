@@ -55,11 +55,13 @@ VCN_CIDR = **10.30.0.0/16**
 
 ***In Repository Secrets,*** need to create the following secrets.
 
+**BASTION_SSH_PRIVATE_KEY**
+
+**BASTION_USER**
+
 **OCI_FINGERPRINT** 
 
 **OCI_PRIVATE_KEY**
-
-**OCI_PRIVATE_KEY_PASSPHRASE**
 
 **OCI_REGION**
 
@@ -67,13 +69,12 @@ VCN_CIDR = **10.30.0.0/16**
 
 **OCI_USER_OCID**
 
-    To get the above information, we can use "oci setup config" in local machine or OCI Cloud Shell.
 
 ***In Repository Variables,*** need to create the following variables.
 
 **STACK_ID**
 
-    this stack_id is what you want to trigger from Github Action.
+    this stack_id is what you want to trigger from Github Action to OCI Resoure Manager.
 
 ***In Environments*** need to create this environment for reviewer and approver process
 
