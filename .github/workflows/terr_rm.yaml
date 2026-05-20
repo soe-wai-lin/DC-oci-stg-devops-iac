@@ -1384,7 +1384,7 @@ jobs:
             --namespace ingress-nginx \
             --set controller.name=custom-nginx \
             --set controller.ingressClassResource.name=custom-nginx \
-            --set controller.ingressClass=custom-nginx \ 
+            --set controller.ingressClass=custom-nginx \
             --set controller.electionID=custom-nginx-leader \
             --set controller.service.type=LoadBalancer \
             --set controller.publishService.enabled=true \
