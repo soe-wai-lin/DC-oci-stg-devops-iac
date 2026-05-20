@@ -1064,7 +1064,7 @@ jobs:
           path: rm_outputs.json
 
   create_stg_prometheus_lb_service:
-    name: STG Prometheus LoadBalancer
+    name: STG Ingress-Nginx and Prometheus LoadBalancer
     runs-on: ubuntu-latest
     needs: apply
 
