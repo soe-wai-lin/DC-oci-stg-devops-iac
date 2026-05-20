@@ -1096,9 +1096,9 @@ jobs:
           STG_OKE_CLUSTER_OCID=$(jq -r '.data.items[] | select(."output-name"=="airs_oke_cluster_ocid") | ."output-value"' rm_outputs.json)
           LB_SUBNET_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_subnet_ocid") | ."output-value"' rm_outputs.json)
           LB_NSG_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_nsg_ocid") | ."output-value"' rm_outputs.json)
-          LB_RESERVED_PUBLIC_IP_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_reserved_public_ip_ocid") | ."output-value"' rm_outputs.json)
+          # LB_RESERVED_PUBLIC_IP_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_reserved_public_ip_ocid") | ."output-value"' rm_outputs.json)
 
-          for v in STG_OKE_CLUSTER_OCID LB_SUBNET_OCID LB_NSG_OCID LB_RESERVED_PUBLIC_IP_OCID; do
+          for v in STG_OKE_CLUSTER_OCID LB_SUBNET_OCID LB_NSG_OCID; do
             val="${!v:-}"
             if [ -z "${val}" ] || [ "${val}" = "null" ]; then
               echo "::error::${v} is empty or null"
@@ -1110,7 +1110,7 @@ jobs:
           echo "STG_OKE_CLUSTER_OCID=${STG_OKE_CLUSTER_OCID}" >> "$GITHUB_ENV"
           echo "LB_SUBNET_OCID=${LB_SUBNET_OCID}" >> "$GITHUB_ENV"
           echo "LB_NSG_OCID=${LB_NSG_OCID}" >> "$GITHUB_ENV"
-          echo "LB_RESERVED_PUBLIC_IP_OCID=${LB_RESERVED_PUBLIC_IP_OCID}" >> "$GITHUB_ENV"
+          # echo "LB_RESERVED_PUBLIC_IP_OCID=${LB_RESERVED_PUBLIC_IP_OCID}" >> "$GITHUB_ENV"
 
 
       - name: Checkout repo
