@@ -1368,20 +1368,21 @@ jobs:
         run: |
           export KUBECONFIG="$HOME/.kube/config"
 
-          kubectl create namespace ingress-nginx-new --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
 
           # Add repo if not already added
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
-          helm repo update
+          # helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+          # helm repo update
 
           # Skip install if already exists
-          if helm status ingress-nginx -n ingress-nginx-new > /dev/null 2>&1; then
-            echo "ingress-nginx already installed, skipping..."
+          if helm status ingress-nginx-new -n ingress-nginx > /dev/null 2>&1; then
+            echo "ingress-nginx-new already installed, skipping..."
           else
-            echo "Installing ingress-nginx..."
+            echo "Installing ingress-nginx-new..."
 
-            helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-            --namespace ingress-nginx-new \
+            helm upgrade --install ingress-nginx-new ingress-nginx/ingress-nginx \
+            --namespace ingress-nginx \
+            --set controller.name=custom-nginx \
             --set controller.service.type=LoadBalancer \
             --set controller.publishService.enabled=true \
             --set controller.service.annotations.service.beta.kubernetes.io/oci-load-balancer-subnet1="${LB_SUBNET_OCID}" \
