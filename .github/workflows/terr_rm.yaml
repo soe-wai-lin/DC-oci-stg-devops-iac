@@ -1371,8 +1371,8 @@ jobs:
           kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
 
           # Add repo if not already added
-          # helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
-          # helm repo update
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+          helm repo update
 
           # Skip install if already exists
           if helm status ingress-nginx-new -n ingress-nginx > /dev/null 2>&1; then
