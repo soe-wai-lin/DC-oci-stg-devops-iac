@@ -14,14 +14,14 @@ resource "oci_ons_subscription" "email_subscription_1" {
   topic_id       = oci_ons_notification_topic.network_alert_topic.id
   freeform_tags           = var.freeform_tags
 }
-resource "oci_ons_subscription" "email_subscription_2" {
-  depends_on = [ oci_ons_notification_topic.network_alert_topic ]
-  compartment_id = oci_identity_compartment.net_compartment.id
-  endpoint       = var.alert_email_2
-  protocol       = "EMAIL"
-  topic_id       = oci_ons_notification_topic.network_alert_topic.id
-  freeform_tags           = var.freeform_tags
-}
+# resource "oci_ons_subscription" "email_subscription_2" {
+#   depends_on = [ oci_ons_notification_topic.network_alert_topic ]
+#   compartment_id = oci_identity_compartment.net_compartment.id
+#   endpoint       = var.alert_email_2
+#   protocol       = "EMAIL"
+#   topic_id       = oci_ons_notification_topic.network_alert_topic.id
+#   freeform_tags           = var.freeform_tags
+# }
 
 resource "oci_events_rule" "network_security_change_rule" {
 
