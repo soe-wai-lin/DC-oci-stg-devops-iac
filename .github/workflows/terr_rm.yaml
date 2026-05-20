@@ -1383,12 +1383,15 @@ jobs:
             helm upgrade --install ingress-nginx-new ingress-nginx/ingress-nginx \
             --namespace ingress-nginx \
             --set controller.name=custom-nginx \
+            --set controller.ingressClassResource.name=custom-nginx \
+            --set controller.ingressClass=custom-nginx \ 
+            --set controller.electionID=custom-nginx-leader \
             --set controller.service.type=LoadBalancer \
             --set controller.publishService.enabled=true \
-            --set controller.service.annotations.service.beta.kubernetes.io/oci-load-balancer-subnet1="${LB_SUBNET_OCID}" \
-            --set controller.service.annotations.oci.oraclecloud.com/oci-network-security-groups="${LB_NSG_OCID}" \
-            --set controller.service.annotations.service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode="None" \
-            --set controller.service.annotations.oci.oraclecloud.com/load-balancer-type="lb"
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-subnet1"="${LB_SUBNET_OCID}" \
+            --set controller.service.annotations."oci\.oraclecloud\.com/oci-network-security-groups"="${LB_NSG_OCID}" \
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-security-list-management-mode"="None" \
+            --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="lb"
           fi
 
 
