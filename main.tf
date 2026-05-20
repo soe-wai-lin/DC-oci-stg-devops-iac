@@ -1144,18 +1144,17 @@ resource "oci_core_public_ip" "nat_reserved_ip" {
 }
 
 
-resource "oci_core_public_ip" "airs_cluster_lb_reserved_ip" {
-  compartment_id = oci_identity_compartment.net_compartment.id
-  lifetime       = "RESERVED"
+# resource "oci_core_public_ip" "airs_cluster_lb_reserved_ip" {
+#   compartment_id = oci_identity_compartment.net_compartment.id
+#   lifetime       = "RESERVED"
 
-  lifecycle {
-    ignore_changes = [private_ip_id]
-  }
+#   lifecycle {
+#     ignore_changes = [private_ip_id]
+#   }
 
-
-  display_name  = "${var.vcn_display_name}-cluster-lb-reserved-ip"
-  freeform_tags = var.freeform_tags
-}
+#   display_name  = "${var.vcn_display_name}-cluster-lb-reserved-ip"
+#   freeform_tags = var.freeform_tags
+# }
 
 resource "oci_core_nat_gateway" "nat" {
   compartment_id = oci_identity_compartment.net_compartment.id

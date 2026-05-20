@@ -280,10 +280,10 @@ output "stg_lb_nsg_ocid" {
 output "stg_bastion_public_ip" {
   value = oci_core_instance.bastion.public_ip
 }
-output "stg_lb_reserved_public_ip_ocid" {
-  description = "AIRS Reserved public IP OCID for the OKE load balancer"
-  value       = oci_core_public_ip.airs_cluster_lb_reserved_ip.ip_address
-}
+# output "stg_lb_reserved_public_ip_ocid" {
+#   description = "AIRS Reserved public IP OCID for the OKE load balancer"
+#   value       = oci_core_public_ip.airs_cluster_lb_reserved_ip.ip_address
+# }
 
 output "oke_worker_node_image_id" {
   value = local.airs_worker_node_image_id
