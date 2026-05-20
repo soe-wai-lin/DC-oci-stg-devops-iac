@@ -1364,27 +1364,31 @@ jobs:
       #         --set gatewayClass.name=nginx
       #     fi
 
-      # - name: Install NGINX Ingress Controller
-      #   run: |
-      #     export KUBECONFIG="$HOME/.kube/config"
+      - name: Install NGINX Ingress Controller
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
 
-      #     kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create namespace ingress-nginx-new --dry-run=client -o yaml | kubectl apply -f -
 
-      #     # Add repo if not already added
-      #     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
-      #     helm repo update
+          # Add repo if not already added
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+          helm repo update
 
-      #     # Skip install if already exists
-      #     if helm status ingress-nginx -n ingress-nginx > /dev/null 2>&1; then
-      #       echo "ingress-nginx already installed, skipping..."
-      #     else
-      #       echo "Installing ingress-nginx..."
+          # Skip install if already exists
+          if helm status ingress-nginx -n ingress-nginx-new > /dev/null 2>&1; then
+            echo "ingress-nginx already installed, skipping..."
+          else
+            echo "Installing ingress-nginx..."
 
-      #       helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-      #       --namespace ingress-nginx \
-      #       --set controller.service.type=LoadBalancer \
-      #       --set controller.publishService.enabled=true
-      #     fi
+            helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+            --namespace ingress-nginx-new \
+            --set controller.service.type=LoadBalancer \
+            --set controller.publishService.enabled=true \
+            --set controller.service.annotations.service.beta.kubernetes.io/oci-load-balancer-subnet1="${LB_SUBNET_OCID}" \
+            --set controller.service.annotations.oci.oraclecloud.com/oci-network-security-groups="${LB_NSG_OCID}" \
+            --set controller.service.annotations.service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode="None" \
+            --set controller.service.annotations.oci.oraclecloud.com/load-balancer-type="lb"
+          fi
 
 
 
