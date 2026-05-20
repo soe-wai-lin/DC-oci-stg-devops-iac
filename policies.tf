@@ -114,8 +114,31 @@ resource "oci_identity_policy" "manage-nsg-by-oke" {
   ]
 }
 
+#################################################
+## To retreive Vault secrets from Worker Node ###
+#################################################
 
+resource "oci_identity_dynamic_group" "dg_for_retrieve_vault_secret" {
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
+  name           = "${var.airs_cluster_name}-retrieve-dg"
+  description    = "Dynamic group to retrieve vault secret"
+  # Autoscaler runs on OKE nodes in prod-app-comp
+  matching_rule = "ALL {instance.compartment.id = '${oci_identity_compartment.app_compartment.id}'}"
+}
 
+resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
+
+  # Change the name once if Terraform is trying to update an old wrongly-attached policy
+  name        = "${var.airs_cluster_name}-retrieve-vault-secret-policy"
+  description = "allow worker nodes to retrieve-vault-secret"
+
+  statements = [
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.app_compartment.id}"
+  ]
+}
 
 
 
