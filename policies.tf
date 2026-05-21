@@ -136,12 +136,25 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   description = "allow worker nodes to retrieve-vault-secret"
 
   statements = [
-    # "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.app_compartment.id}",
-    # "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment management where target.vault.id = 'ocid1.vault.oc1.ap-singapore-1.gzumz75laacr4.abzwsljrja3btmsl22ymwl5a7b7ghmmf46ilqcumjcd3ph2qtqfgvtjf7h3q'",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-family in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use vaults in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq"
   
+  ]
+}
+resource "oci_identity_policy" "workload_identity_vault_access" {
+  provider       = oci.home
+  compartment_id = var.tenancy_ocid
+
+  name        = "${var.airs_cluster_name}-workload-secret-policy"
+  description = "Allow OKE workload identity to access vault secrets"
+
+  statements = [
+    "Allow any-user to use secret-family in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq where ALL {request.principal.type='workload', request.principal.namespace='secrets-store-oci', request.principal.service_account='oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id='${oci_containerengine_cluster.app_compartment.id}'}",
+
+    "Allow any-user to use vaults in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq where ALL {request.principal.type='workload', request.principal.namespace='secrets-store-oci', request.principal.service_account='oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id='${oci_containerengine_cluster.app_compartment.id}'}",
+
+    "Allow any-user to use keys in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq where ALL {request.principal.type='workload', request.principal.namespace='secrets-store-oci', request.principal.service_account='oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id='${oci_containerengine_cluster.app_compartment.id}'}"
   ]
 }
 
