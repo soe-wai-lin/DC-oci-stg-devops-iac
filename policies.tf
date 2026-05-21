@@ -123,8 +123,8 @@ resource "oci_identity_dynamic_group" "dg_for_retrieve_vault_secret" {
   provider = oci.home
   name           = "${var.airs_cluster_name}-retrieve-dg"
   description    = "Dynamic group to retrieve vault secret"
-  # Autoscaler runs on OKE nodes in prod-app-comp
   matching_rule = "ALL {instance.compartment.id = '${oci_identity_compartment.app_compartment.id}'}"
+
 }
 
 resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
@@ -136,7 +136,11 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   description = "allow worker nodes to retrieve-vault-secret"
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.app_compartment.id}"
+    # "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.app_compartment.id}",
+    # "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment management where target.vault.id = 'ocid1.vault.oc1.ap-singapore-1.gzumz75laacr4.abzwsljrja3btmsl22ymwl5a7b7ghmmf46ilqcumjcd3ph2qtqfgvtjf7h3q'",
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-family in compartment management",
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment management"
+  
   ]
 }
 
