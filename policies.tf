@@ -136,9 +136,9 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   description = "allow worker nodes to retrieve-vault-secret"
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-family in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq",
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use vaults in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq"
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read vaults in compartment id ocid1.compartment.oc1..aaaaaaaaurbvoggxsyrbvdw7oscscre64rcdd7daetbvdc5ftuolzvxmxbsq"
   
   ]
 }
