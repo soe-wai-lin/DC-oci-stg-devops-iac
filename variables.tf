@@ -658,7 +658,7 @@ variable "airs_cordonNodeBeforeTerminating" {
 variable "airs_node_eviction_grace_duration" {
   description = "Drain grace duration used by OKE during node actions such as cycling or replacement."
   type        = string
-  default     = "PT60M"
+  default     = "PT1H"
 }
 
 variable "airs_node_force_action_after_grace_duration" {
