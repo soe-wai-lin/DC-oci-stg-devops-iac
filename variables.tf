@@ -140,13 +140,6 @@ variable "nsg_airs_pod" {
 #   default = "nsg-stg-cms-pod"
 # }
 
-# variable "alert_email" {
-#   type = list(string)
-#   default = [
-#     "wailin.s@trinitywizards.com",
-#     "09soewailynn@gmail.com"
-#   ]
-# }
 variable "alert_email_1" {
   default = "wailin.s@trinitywizards.com"
 }
@@ -162,11 +155,11 @@ variable "tenancy_ocid" {
   default     = "ocid1.tenancy.oc1..aaaaaaaaypiggoy7fnooykgwthklvkettgl7arlgyab5lvj67xykehcnipxq"
 }
 
-variable "ssh_public_key" {
-  description = "SSH public key content used for instance login."
-  type        = string
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMMNtwjmuKJ2sZgOm6hFTD0Vu2LVyR9ac72w5uyiRe8U swl@swl"
-}
+# variable "ssh_public_key" {
+#   description = "SSH public key content used for instance login."
+#   type        = string
+#   default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMMNtwjmuKJ2sZgOm6hFTD0Vu2LVyR9ac72w5uyiRe8U swl@swl"
+# }
 
 variable "net_comp" {
   default = "network"
