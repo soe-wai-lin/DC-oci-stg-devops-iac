@@ -78,7 +78,6 @@ services:
       - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: grafana
-
     volumes:
       - /monitoring/grafana-data:/var/lib/grafana
     restart: always
