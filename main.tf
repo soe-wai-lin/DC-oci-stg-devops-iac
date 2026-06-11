@@ -873,22 +873,6 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_gfhost_ingres
     }
   }
 }
-resource "oci_core_network_security_group_security_rule" "nsg_prod_gfhost_ingress_80" {
-  network_security_group_id = oci_core_network_security_group.nsg_prod_gfhost.id
-  direction                 = "INGRESS"
-  protocol                  = "6"
-  source                    = "0.0.0.0/0"
-  source_type               = "CIDR_BLOCK"
-  description               = "Allow Grafana port 80 from anywhere"
-
-  # Optional: Restrict to ping only (echo request = type 8)
-  tcp_options {
-    destination_port_range {
-      min = 80
-      max = 80
-    }
-  }
-}
 
 # EGRESS: Allow all 
 resource "oci_core_network_security_group_security_rule" "nsg_prod_gfhost_egress_all" {
