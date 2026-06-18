@@ -798,6 +798,20 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_bastion_egres
     }
   }
 }
+resource "oci_core_network_security_group_security_rule" "nsg_prod_bastion_egress_to_db" {
+  network_security_group_id = oci_core_network_security_group.nsg_prod_bastion.id
+  direction                 = "EGRESS"
+  protocol                  = "6"
+  destination = var.db_cidr_block
+  destination_type          = "CIDR_BLOCK"
+  description               = "Allow access to DB subnet"
+  tcp_options {
+    destination_port_range {
+      min = 5432
+      max = 5432
+    }
+  }
+}
 
 resource "oci_core_network_security_group_security_rule" "nsg_prod_bastion_egress_airs_worker" {
   network_security_group_id = oci_core_network_security_group.nsg_prod_bastion.id
@@ -908,6 +922,22 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_db_ingress_fr
   source                    = var.airs_micro_oke_worker_cidr_block
   source_type               = "CIDR_BLOCK"
   description               = "Allow 5432 from AIRS worker"
+
+  # Optional: Restrict to ping only (echo request = type 8)
+  tcp_options {
+    destination_port_range {
+      min = 5432
+      max = 5432
+    }
+  }
+}
+resource "oci_core_network_security_group_security_rule" "nsg_prod_db_ingress_from_bastion" {
+  network_security_group_id = oci_core_network_security_group.nsg_prod_db.id
+  direction                 = "INGRESS"
+  protocol                  = "6"
+  source                    = oci_core_network_security_group.nsg_prod_bastion.id
+  source_type               = "NETWORK_SECURITY_GROUP"
+  description               = "Allow 5432 from Bastion"
 
   # Optional: Restrict to ping only (echo request = type 8)
   tcp_options {
