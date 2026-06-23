@@ -451,6 +451,84 @@ resource "oci_containerengine_addon" "airs_cluster_autoscaler" {
   }
 }
 
+#########################################
+# OKE Kubernetes Metrics Server add-on
+# Works for OKE clusters.
+#
+# Notes:
+# - Required for `kubectl top nodes`, `kubectl top pods`,
+#   and many HPA/resource metrics use cases.
+# - OKE Metrics Server add-on requires cert-manager.
+#########################################
+resource "oci_containerengine_addon" "airs_metrics_server" {
+  cluster_id                       = oci_containerengine_cluster.stg_oke.id
+  addon_name                       = "KubernetesMetricsServer"
+  remove_addon_resources_on_delete = true
+  override_existing                = true
+
+  # Optional: schedule Metrics Server on your system node pool
+  configurations {
+    key = "nodeSelectors"
+    value = jsonencode({
+      "nodepool-role" = "system"
+    })
+  }
+
+  # Optional: number of replicas
+  configurations {
+    key   = "numOfReplicas"
+    value = tostring(var.airs_metrics_server_num_replicas)
+  }
+
+  depends_on = [
+    oci_containerengine_cluster.stg_oke,
+    oci_containerengine_addon.airs_cert_manager,
+    oci_containerengine_node_pool.airs_system,
+    oci_containerengine_node_pool.airs_worker
+  ]
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
+}
+
+#########################################
+# OKE Cert Manager add-on
+# Required dependency for Kubernetes Metrics Server add-on.
+#########################################
+resource "oci_containerengine_addon" "airs_cert_manager" {
+  cluster_id                       = oci_containerengine_cluster.stg_oke.id
+  addon_name                       = "CertManager"
+  remove_addon_resources_on_delete = true
+  override_existing                = true
+
+  configurations {
+    key = "nodeSelectors"
+    value = jsonencode({
+      "nodepool-role" = "system"
+    })
+  }
+
+  configurations {
+    key   = "numOfReplicas"
+    value = tostring(var.airs_cert_manager_num_replicas)
+  }
+
+  depends_on = [
+    oci_containerengine_cluster.stg_oke,
+    oci_containerengine_node_pool.airs_system,
+    oci_containerengine_node_pool.airs_worker
+  ]
+
+  timeouts {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
+}
+
 
 
 

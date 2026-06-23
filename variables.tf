@@ -690,6 +690,20 @@ variable "defined_tags" {
   default     = {}
 }
 
+variable "airs_metrics_server_num_replicas" {
+  description = "Number of replicas for OKE Kubernetes Metrics Server add-on."
+  type        = number
+  default     = 1
+}
+
+variable "airs_cert_manager_num_replicas" {
+  description = "Number of replicas for OKE Cert Manager add-on."
+  type        = number
+  default     = 1
+}
+
+
+
 # #####################
 # # WEB Cluster settings  #
 # #####################
