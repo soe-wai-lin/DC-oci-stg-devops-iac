@@ -1,12 +1,17 @@
 name: OCI Resource Manager Apply
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     stack_id:
-  #       description: "OCI Resource Manager Stack OCID"
-  #       required: false    ## use "true" if want to maually trigger
-  #       type: string
+  workflow_dispatch:
+    inputs:
+      resources_apply:
+        description: "Manually trigger apply for OCI Infra Resource Manager"
+        required: true   ## use "true" if want to maually trigger
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: "false"
+
   #     upgrade_provider:
   #       description: "Upgrade provider versions during plan/apply"
   #       required: false
