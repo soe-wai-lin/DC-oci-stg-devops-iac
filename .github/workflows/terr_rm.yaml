@@ -163,6 +163,10 @@ jobs:
   apply:
     name: STG Infra OCI Resource Manager Apply
     runs-on: ubuntu-latest
+
+# ✅ Only run apply when manually triggered AND input = true
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.resources_apply == 'true'
+
     needs: plan
 
     # This environment must be created in GitHub repo settings
