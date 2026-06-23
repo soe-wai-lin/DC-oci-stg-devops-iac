@@ -295,6 +295,59 @@ resource "oci_core_network_security_group" "nsg_prod_lb" {
   vcn_id         = oci_core_vcn.terra_vcn.id
   display_name   = var.nsg_lb
 }
+
+## Cloudflare IPs for LB ingress rules
+data "http" "cloudflare_ipv4" {
+  url = "https://www.cloudflare.com/ips-v4"
+}
+
+data "http" "cloudflare_ipv6" {
+  url = "https://www.cloudflare.com/ips-v6"
+}
+locals {
+  cloudflare_ipv4_list = split("\n", trimspace(data.http.cloudflare_ipv4.response_body))
+  cloudflare_ipv6_list = split("\n", trimspace(data.http.cloudflare_ipv6.response_body))
+}
+locals {
+  cf_ipv4 = [for ip in local.cloudflare_ipv4_list : ip if ip != ""]
+  cf_ipv6 = [for ip in local.cloudflare_ipv6_list : ip if ip != ""]
+}
+resource "oci_core_network_security_group_security_rule" "allow_cf_https_ipv4" {
+  for_each = toset(local.cf_ipv4)
+
+  network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
+
+  direction = "INGRESS"
+  protocol  = "6" # TCP
+
+  source      = each.value
+  source_type = "CIDR_BLOCK"
+
+  tcp_options {
+    destination_port_range {
+      min = 443
+      max = 443
+    }
+  }
+}
+resource "oci_core_network_security_group_security_rule" "allow_cf_http_ipv4" {
+  for_each = toset(local.cf_ipv4)
+
+  network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
+
+  direction = "INGRESS"
+  protocol  = "6"
+
+  source      = each.value
+  source_type = "CIDR_BLOCK"
+
+  tcp_options {
+    destination_port_range {
+      min = 80
+      max = 80
+    }
+  }
+}
 # INGRESS: 
 resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_443" {
   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
