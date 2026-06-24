@@ -314,6 +314,7 @@ locals {
 }
 resource "oci_core_network_security_group_security_rule" "allow_cf_https_ipv4" {
   for_each = toset(local.cf_ipv4)
+  description = "Allow Cloudflare HTTPS traffic from ${each.value} to Load Balancer."
 
   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
 
@@ -332,7 +333,7 @@ resource "oci_core_network_security_group_security_rule" "allow_cf_https_ipv4" {
 }
 resource "oci_core_network_security_group_security_rule" "allow_cf_http_ipv4" {
   for_each = toset(local.cf_ipv4)
-
+  description = "Allow Cloudflare HTTP traffic from ${each.value} to Load Balancer."
   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
 
   direction = "INGRESS"
