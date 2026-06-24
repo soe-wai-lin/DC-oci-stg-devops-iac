@@ -349,45 +349,46 @@ resource "oci_core_network_security_group_security_rule" "allow_cf_http_ipv4" {
   }
 }
 # INGRESS: 
-resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_443" {
-  network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
-  direction                 = "INGRESS"
-  protocol                  = "6"
-  source                    = "0.0.0.0/0"
-  source_type               = "CIDR_BLOCK"
-  description               = "Allow inbound traffic to Load Balancer."
+# resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_443" {
+#   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
+#   direction                 = "INGRESS"
+#   protocol                  = "6"
+#   source                    = "0.0.0.0/0"
+#   source_type               = "CIDR_BLOCK"
+#   description               = "Allow inbound traffic to Load Balancer."
 
-  # Optional: Restrict to ping only (echo request = type 8)
-  tcp_options {
-    destination_port_range {
-      min = 443
-      max = 443
-    }
-  }
-}
+#   # Optional: Restrict to ping only (echo request = type 8)
+#   tcp_options {
+#     destination_port_range {
+#       min = 443
+#       max = 443
+#     }
+#   }
+# }
 
-resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_80" {
-  network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
-  direction                 = "INGRESS"
-  protocol                  = "6"
-  source                    = "0.0.0.0/0"
-  source_type               = "CIDR_BLOCK"
-  description               = "Allow inbound traffic to Load Balancer."
+# resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_80" {
+#   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
+#   direction                 = "INGRESS"
+#   protocol                  = "6"
+#   source                    = "0.0.0.0/0"
+#   source_type               = "CIDR_BLOCK"
+#   description               = "Allow inbound traffic to Load Balancer."
 
-  # Optional: Restrict to ping only (echo request = type 8)
-  tcp_options {
-    destination_port_range {
-      min = 80
-      max = 80
-    }
-  }
-}
+#   # Optional: Restrict to ping only (echo request = type 8)
+#   tcp_options {
+#     destination_port_range {
+#       min = 80
+#       max = 80
+#     }
+#   }
+# }
 
 resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_prometheus_9090" {
   network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
   direction                 = "INGRESS"
   protocol                  = "6"
-  source                    = "0.0.0.0/0"
+  # source                    = "0.0.0.0/0"
+  source                    = var.lb_subnet_cidr
   source_type               = "CIDR_BLOCK"
   description               = "Allow prometheus port to Load Balancer."
 
