@@ -52,6 +52,7 @@ resource "oci_identity_policy" "authentik_bucket_policy" {
   description    = "Policy to allow access to the Authentik Object Storage bucket."
 
   statements = [
-    "Allow group ABDigital to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'"
+    "Allow group ABDigital to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'",
+    "Allow group ABDigital-Developer to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'"
   ]
 }
