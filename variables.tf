@@ -318,6 +318,67 @@ variable "metadata" {
   default     = {}
 }
 
+variable "authentik_bucket_name" {
+  description = "Name of the Authentik Object Storage bucket."
+  type        = string
+  default     = "stg_authentik_bucket"
+}
+
+variable "authentik_access_type" {
+  description = "Authentik bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+  type        = string
+  default     = "NoPublicAccess"
+
+  validation {
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.authentik_access_type)
+    error_message = "authentik_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+  }
+}
+
+variable "authentik_storage_tier" {
+  description = "Authentik bucket storage tier: Standard or Archive."
+  type        = string
+  default     = "Standard"
+
+  validation {
+    condition     = contains(["Standard", "Archive"], var.authentik_storage_tier)
+    error_message = "authentik_storage_tier must be either Standard or Archive."
+  }
+}
+
+variable "authentik_auto_tiering" {
+  description = "Authentik bucket auto tiering setting: Disabled or InfrequentAccess."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Disabled", "InfrequentAccess"], var.authentik_auto_tiering)
+    error_message = "authentik_auto_tiering must be either Disabled or InfrequentAccess."
+  }
+}
+
+variable "authentik_versioning" {
+  description = "Enable object versioning on the Authentik bucket: Enabled or Disabled."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.authentik_versioning)
+    error_message = "authentik_versioning must be either Enabled or Disabled."
+  }
+}
+
+variable "authentik_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the Authentik bucket."
+  type        = bool
+  default     = false
+}
+
+variable "authentik_kms_key_id" {
+  description = "Optional KMS key OCID for Authentik bucket encryption."
+  type        = string
+  default     = null
+}
 
 
 

@@ -21,3 +21,36 @@ data "oci_objectstorage_bucket" "bucket" {
   name      = oci_objectstorage_bucket.bucket.name
   namespace = data.oci_objectstorage_namespace.ns.namespace
 }
+
+########################
+## Authentik Bucket  ###
+########################
+
+resource "oci_objectstorage_bucket" "authentik_bucket" {
+  compartment_id = oci_identity_compartment.data_compartment.id
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  name           = var.authentik_bucket_name
+
+  access_type           = var.authentik_access_type
+  storage_tier          = var.authentik_storage_tier
+  auto_tiering          = var.authentik_auto_tiering
+  versioning            = var.authentik_versioning
+  object_events_enabled = var.authentik_object_events_enabled
+  kms_key_id            = var.authentik_kms_key_id
+  metadata              = var.metadata
+  freeform_tags         = var.freeform_tags
+}
+
+#####################################
+## IAM Policy for Authentik Bucket ##
+#####################################
+
+resource "oci_identity_policy" "authentik_bucket_policy" {
+  name           = "authentik_bucket_policy"
+  compartment_id = oci_identity_compartment.data_compartment.id
+  description    = "Policy to allow access to the Authentik Object Storage bucket."
+
+  statements = [
+    "Allow group ABDigital to manage object-family in compartment ${oci_identity_compartment.data_compartment.name} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'"
+  ]
+}
