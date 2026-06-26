@@ -102,7 +102,7 @@ VCN_CIDR = **10.30.0.0/16**
 
     ![GHA WorkFlow Cancel](images/cancel-gha-workflow-1.png)
 
-- Code change whatever you want in ***terraform files***.
+- Change your codes whatever you want in ***terraform files***.
 - Push code to ***main*** branch.
   ```
    git add .
@@ -111,12 +111,16 @@ VCN_CIDR = **10.30.0.0/16**
 
    git push origin main
   ```
-- ( **Very Important** , **Be Careful** ) When you push code to main, ***Github Action*** workflow will trigger terraform plan. As soon as Plan Stage success, immediately ***Cancel*** Workflow for ***REVIEW CODE CHANGES***
-
+- ( **Very Important** , **Be Careful** ) 
   
-  ![GHA WorkFlow Cancel](images/cancel-gha-workflow-2.png)
+  - When you push code to main, ***Github  Action*** workflow will trigger ***terraform plan*** **ONLY**.
 
-- Go to ***Resource Manager*** from OCI Console.
+    ![](images/oci-rm-6.png)
+  - Not automatically trigger ***terraform apply***.
+  - ***Terraform Apply*** can only be triggered **MANUALLY**.
+
+
+- Checking **Plan File**.  Go to ***Resource Manager*** from OCI Console.
     - Check Job file first. This is like **Terraform Plan** file.
     - ***Resource Manager*** can be found under ***Staging*** Comparment.
 
@@ -124,8 +128,11 @@ VCN_CIDR = **10.30.0.0/16**
       ![OCI-RM](images/oci-rm-2.png)
       ![OCI-RM](images/oci-rm-3.png)
 
-- If ***Plan Jobs*** is exactly what you want, you can ***Apply this Plan*** file.
-    - For ***Apply Jobs***, you don't need to push again. 
+- If ***Plan Jobs*** is exactly what you want, you can ***Apply***.
+    - For ***Apply Jobs***, you need **MANUALLY** run.
+    - Go to **Github Action** from console. ( OCI Resource Manager Apply ==> Run Workflow ==> true ). At this time, **Terraform Apply** will be automatically triggerd ***as soon as*** **Terraform Plan** success.
+        ![OCI-RM](images/oci-rm-5.png)
+
     - Go to **Github Action** from console and ***Re-run jobs*** => ***Re-run all jobs***
 
         ![OCI-RM](images/oci-rm-4.png)
@@ -144,4 +151,12 @@ VCN_CIDR = **10.30.0.0/16**
 - **Grafana** connect with **Prometheus** using **Internal Loadbalancer** fron **monitoring** namespace.
 
 # Important Note
-- **IF YOU WANT TO ***DRIFT DETECTION*** WITHOUT CODE CHANGES, YOU CAN RE-RUN LATEST WORKFLOW AND CHECK PLAN JOBS. DON'T FORGET TO CANCEL WORKFLWO AFTER PLAN STAGE SUCCESS.**
+- If you want to ***DRIFT DETECTION*** without code changes, you can re-run latest workflow and check plan jobs. **DON'T FORGET** to cancel workflow after plan stage success.
+
+ - Go to **Github Action** from console and ***Re-run jobs*** => ***Re-run all jobs***
+
+      ![OCI-RM](images/oci-rm-4.png)
+
+ - Always check, Github Action Workflow number and **gha-plan-(x)** and **gha-apply-(x)**. In this case, ***84***
+
+      ![OCI-RM](images/oci-rm-3.png)
