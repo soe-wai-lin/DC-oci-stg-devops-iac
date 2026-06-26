@@ -47,7 +47,8 @@ resource "oci_objectstorage_bucket" "authentik_bucket" {
 
 resource "oci_identity_policy" "authentik_bucket_policy" {
   name           = "authentik_bucket_policy"
-  compartment_id = oci_identity_compartment.data_compartment.id
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
   description    = "Policy to allow access to the Authentik Object Storage bucket."
 
   statements = [
