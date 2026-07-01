@@ -147,6 +147,24 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   ]
 }
 
+########################################################
+## Read-only IAM Policy for ABDigital-Developer Group ##
+########################################################
+
+resource "oci_identity_policy" "abdigital_developer_gp_readonly_policy" {
+  name           = "abdigital_developer_gp_readonly_policy"
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
+  description    = "Policy to read-only access for ABDigital-Developer group."
+
+  statements = [
+    "Allow group ABDigital-Developer to read all-resources in compartment id ${oci_identity_compartment.data_compartment.id}",
+    "Allow group ABDigital-Developer to read all-resources in compartment id ${oci_identity_compartment.net_compartment.id}",
+    "Allow group ABDigital-Developer to read all-resources in compartment id ${oci_identity_compartment.app_compartment.id}",
+    "Allow group ABDigital-Developer to read all-resources in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
+  ]
+}
+
 
 
 
