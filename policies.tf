@@ -164,8 +164,10 @@ resource "oci_identity_policy" "psql_exporter_retrieve_vault_secret" {
   description = "allow psql_exporter to retrieve-vault-secret"
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to read secret-family in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
-    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to use keys in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to use keys in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to read vaults in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} read secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
   ]
 }
 
