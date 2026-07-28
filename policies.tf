@@ -143,7 +143,8 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read vaults in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-bundles in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq" 
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-bundles in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
   ]
 }
 
