@@ -143,11 +143,20 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
     "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read vaults in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-bundles in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use secret-family in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to use keys in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read vaults in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
-    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
+    "Allow dynamic-group ${oci_identity_dynamic_group.dg_for_retrieve_vault_secret.name} to read secret-bundles in compartment id ocid1.compartment.oc1..aaaaaaaad6blgdgfacjlheznk2g6tjuoa7gesxh75jfyftxsmpz2sovoxrdq"
+  ]
+}
+
+resource "oci_identity_policy" "psql_exporter_retrieve_vault_secret" {
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
+
+  # Change the name once if Terraform is trying to update an old wrongly-attached policy
+  name        = "${var.airs_cluster_name}-psql_exporter-vault-secret-policy"
+  description = "allow psql_exporter to retrieve-vault-secret"
+
+  statements = [
+    "Allow any-user to use secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id} where all request.principal.type = 'workload', request.principal.namespace = 'secrets-store-oci', request.principal.service_account = 'oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id = ${oci_identity_compartment.app_compartment.id}"
   ]
 }
 
