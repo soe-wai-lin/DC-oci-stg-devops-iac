@@ -147,6 +147,11 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   ]
 }
 
+#################################################
+## postgres_exporter need to use credential    ##
+## To retreive Vault secrets from Worker Node ###
+#################################################
+
 resource "oci_identity_dynamic_group" "psql_exporter_retrieve_vault_secret" {
   compartment_id = var.tenancy_ocid
   provider = oci.home
