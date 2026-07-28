@@ -147,6 +147,14 @@ resource "oci_identity_policy" "dg_for_retrieve_vault_secret" {
   ]
 }
 
+resource "oci_identity_dynamic_group" "psql_exporter_retrieve_vault_secret" {
+  compartment_id = var.tenancy_ocid
+  provider = oci.home
+  name           = "${var.airs_cluster_name}-psql_exporter_retrieve-dg"
+  description    = "Dynamic group to retrieve vault secret"
+  matching_rule = "ALL {instance.compartment.id = '${oci_identity_compartment.app_compartment.id}'}"
+
+}
 resource "oci_identity_policy" "psql_exporter_retrieve_vault_secret" {
   compartment_id = var.tenancy_ocid
   provider = oci.home
@@ -156,7 +164,8 @@ resource "oci_identity_policy" "psql_exporter_retrieve_vault_secret" {
   description = "allow psql_exporter to retrieve-vault-secret"
 
   statements = [
-    "Allow any-user to use secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id} where ALL {request.principal.type = 'workload', request.principal.namespace = 'monitoring', request.principal.service_account = 'postgres-exporter', request.principal.cluster_id ='${oci_containerengine_cluster.stg_oke.id}'}"
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to read secret-family in compartment id ${oci_identity_compartment.mgmt_compartment.id}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.psql_exporter_retrieve_vault_secret.name} to use keys in compartment id ${oci_identity_compartment.mgmt_compartment.id}"
   ]
 }
 
