@@ -156,7 +156,7 @@ resource "oci_identity_policy" "psql_exporter_retrieve_vault_secret" {
   description = "allow psql_exporter to retrieve-vault-secret"
 
   statements = [
-    "Allow any-user to use secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id} where all request.principal.type = 'workload', request.principal.namespace = 'secrets-store-oci', request.principal.service_account = 'oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id = ${oci_identity_compartment.app_compartment.id}"
+    "Allow any-user to use secret-bundles in compartment id ${oci_identity_compartment.mgmt_compartment.id} where all request.principal.type = 'workload', request.principal.namespace = 'secrets-store-oci', request.principal.service_account = 'oci-secrets-store-csi-driver-provider-sa', request.principal.cluster_id ='${oci_containerengine_cluster.stg_oke.id}'"
   ]
 }
 
