@@ -1362,13 +1362,13 @@ jobs:
 
           helm list -n monitoring
 
-      - name: Install Redis-Exporter Helm Chart
+      - name: Install Redis-Exporter-Primary Helm Chart
         run: |
           export KUBECONFIG="$HOME/.kube/config"
 
           kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-          cat <<EOF > stg-redis-values.yml
+          cat <<EOF > stg-redis-primary-values.yml
           redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
           image:
             repository: docker.io/oliver006/redis_exporter
@@ -1388,17 +1388,56 @@ jobs:
               enabled: true
           EOF
 
-          cat stg-redis-values.yml
+          cat stg-redis-primary-values.yml
 
 
-          # Skip redis-exporter install if release already exists
-          if helm status redis-exporter -n monitoring > /dev/null 2>&1; then
-            echo "redis-exporter Helm release already exists in monitoring, skipping Helm install."
+          # Skip redis-exporter-primary install if release already exists
+          if helm status redis-exporter-primary -n monitoring > /dev/null 2>&1; then
+            echo "redis-exporter-primary Helm release already exists in monitoring, skipping Helm install."
           else
-            echo "redis-exporter Helm release not found, installing..."
-            helm install redis-exporter prometheus-community/prometheus-redis-exporter \
+            echo "redis-exporter-primary Helm release not found, installing..."
+            helm install redis-exporter-primary prometheus-community/prometheus-redis-exporter \
               --namespace monitoring \
-              -f stg-redis-values.yml
+              -f stg-redis-primary-values.yml
+          fi
+
+      - name: Install Redis-Exporter-Replica Helm Chart
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+          cat <<EOF > stg-redis-replica-values.yml
+          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
+          image:
+            repository: docker.io/oliver006/redis_exporter
+            tag: v1.88.0
+            pullPolicy: IfNotPresent
+
+          serviceMonitor:
+            enabled: true
+            interval: 30s
+            namespace: monitoring
+
+            labels:
+              release: kube-prometheus-stack
+
+          prometheus:
+            monitor:
+              enabled: true
+          EOF
+
+          cat stg-redis-replica-values.yml
+
+
+          # Skip redis-exporter-replica install if release already exists
+          if helm status redis-exporter-replica -n monitoring > /dev/null 2>&1; then
+            echo "redis-exporter-replica Helm release already exists in monitoring, skipping Helm install."
+          else
+            echo "redis-exporter-replica Helm release not found, installing..."
+            helm install redis-exporter-replica prometheus-community/prometheus-redis-exporter \
+              --namespace monitoring \
+              -f stg-redis-replica-values.yml
           fi
 
       - name: Apply DevOps-managed Prometheus Internal LoadBalancer 
