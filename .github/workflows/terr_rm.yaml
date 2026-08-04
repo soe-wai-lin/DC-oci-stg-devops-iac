@@ -1306,15 +1306,61 @@ jobs:
 
           kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
+          # Install Blackbox Exporter
+          if helm status blackbox -n monitoring > /dev/null 2>&1; then
+            echo "blackbox Helm release already exists in monitoring, skipping Helm install."
+          else
+            echo "blackbox Helm release not found, installing..."
+            helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter \
+              --namespace monitoring 
+          fi
+
+          cat <<EOF > values.yaml
+          ---
+          prometheus:
+            prometheusSpec:
+              retention: 90d
+              storageSpec:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: oci-bv   # or your StorageClass
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 200Gi
+
+              additionalScrapeConfigs:
+                - job_name: 'blackbox-http'
+                  metrics_path: /probe
+                  params:
+                    module: [http_2xx]
+                  static_configs:
+                    - targets:
+                        - https://cms.sandbox.airborneo.com
+                  relabel_configs:
+                    - source_labels: [__address__]
+                      target_label: __param_target
+                    - target_label: __address__
+                      replacement: blackbox-prometheus-blackbox-exporter:9115
+                    - source_labels: [__param_target]
+                      target_label: instance
+          EOF
+
+          cat values.yaml
+
           # Skip prometheus install if release already exists
           if helm status kube-prometheus-stack -n monitoring > /dev/null 2>&1; then
             echo "kube-prometheus-stack Helm release already exists in monitoring, skipping Helm install."
           else
             echo "kube-prometheus-stack Helm release not found, installing..."
-            helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f values.yaml \
               --namespace monitoring \
-              --set prometheus.service.type=ClusterIP
+              --set prometheus.service.type=ClusterIP 
           fi
+
+          ### Check helm list ####
+
+          helm list -n monitoring
 
       - name: Install Redis-Exporter Helm Chart
         run: |
