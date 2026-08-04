@@ -1344,13 +1344,13 @@ jobs:
 
           cat stg-redis-values.yml
 
-          
+
           # Skip redis-exporter install if release already exists
           if helm status redis-exporter -n monitoring > /dev/null 2>&1; then
             echo "redis-exporter Helm release already exists in monitoring, skipping Helm install."
           else
             echo "redis-exporter Helm release not found, installing..."
-            helm upgrade --install redis-exporter prometheus-community/kube-prometheus-stack \
+            helm install redis-exporter prometheus-community/kube-prometheus-stack \
               --namespace monitoring \
               -f stg-redis-values.yml
           fi
