@@ -1408,7 +1408,7 @@ jobs:
           kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
           cat <<EOF > stg-redis-replica-values.yml
-          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
+          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-r.redis.ap-singapore-1.oci.oraclecloud.com:6379
           image:
             repository: docker.io/oliver006/redis_exporter
             tag: v1.88.0
