@@ -1316,6 +1316,45 @@ jobs:
               --set prometheus.service.type=ClusterIP
           fi
 
+      - name: Install Redis-Exporter Helm Chart
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+          cat <<EOF > stg-redis-values.yml
+          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
+          image:
+            repository: docker.io/oliver006/redis_exporter
+            tag: v1.88.0
+            pullPolicy: IfNotPresent
+
+          serviceMonitor:
+            enabled: true
+            interval: 30s
+            namespace: monitoring
+
+            labels:
+              release: kube-prometheus-stack
+
+          prometheus:
+            monitor:
+              enabled: true
+          EOF
+
+          cat stg-redis-values.yml
+
+          
+          # Skip redis-exporter install if release already exists
+          if helm status redis-exporter -n monitoring > /dev/null 2>&1; then
+            echo "redis-exporter Helm release already exists in monitoring, skipping Helm install."
+          else
+            echo "redis-exporter Helm release not found, installing..."
+            helm upgrade --install redis-exporter prometheus-community/kube-prometheus-stack \
+              --namespace monitoring \
+              -f stg-redis-values.yml
+          fi
+
       - name: Apply DevOps-managed Prometheus Internal LoadBalancer 
         shell: bash
         run: |
