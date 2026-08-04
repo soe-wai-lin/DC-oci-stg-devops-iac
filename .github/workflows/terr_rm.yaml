@@ -1350,7 +1350,7 @@ jobs:
             echo "redis-exporter Helm release already exists in monitoring, skipping Helm install."
           else
             echo "redis-exporter Helm release not found, installing..."
-            helm install redis-exporter prometheus-community/kube-prometheus-stack \
+            helm install redis-exporter prometheus-community/prometheus-redis-exporter \
               --namespace monitoring \
               -f stg-redis-values.yml
           fi
