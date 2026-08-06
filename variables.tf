@@ -380,6 +380,70 @@ variable "authentik_kms_key_id" {
   default     = null
 }
 
+## Loki Bucket variables ##
+
+variable "loki_bucket_name" {
+  description = "Name of the Loki Object Storage bucket."
+  type        = string
+  default     = "stg_loki_bucket"
+}
+
+variable "loki_access_type" {
+  description = "loki bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+  type        = string
+  default     = "NoPublicAccess"
+
+  validation {
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.loki_access_type)
+    error_message = "loki_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+  }
+}
+
+variable "loki_storage_tier" {
+  description = "loki bucket storage tier: Standard or Archive."
+  type        = string
+  default     = "Standard"
+
+  validation {
+    condition     = contains(["Standard", "Archive"], var.loki_storage_tier)
+    error_message = "loki_storage_tier must be either Standard or Archive."
+  }
+}
+
+variable "loki_auto_tiering" {
+  description = "loki bucket auto tiering setting: Disabled or InfrequentAccess."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Disabled", "InfrequentAccess"], var.loki_auto_tiering)
+    error_message = "loki_auto_tiering must be either Disabled or InfrequentAccess."
+  }
+}
+
+variable "loki_versioning" {
+  description = "Enable object versioning on the loki bucket: Enabled or Disabled."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.loki_versioning)
+    error_message = "loki_versioning must be either Enabled or Disabled."
+  }
+}
+
+variable "loki_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the loki bucket."
+  type        = bool
+  default     = false
+}
+
+variable "loki_kms_key_id" {
+  description = "Optional KMS key OCID for loki bucket encryption."
+  type        = string
+  default     = null
+}
+
 
 
 ##############################
