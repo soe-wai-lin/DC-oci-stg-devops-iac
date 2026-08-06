@@ -382,64 +382,188 @@ variable "authentik_kms_key_id" {
 
 ## Loki Bucket variables ##
 
-variable "loki_bucket_name" {
+variable "loki_chucks_bucket_name" {
   description = "Name of the Loki Object Storage bucket."
   type        = string
-  default     = "stg_loki_bucket"
+  default     = "stg_loki_chunks_bucket"
 }
 
-variable "loki_access_type" {
-  description = "loki bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+variable "loki_chucks_access_type" {
+  description = "loki chucks bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
   type        = string
   default     = "NoPublicAccess"
 
   validation {
-    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.loki_access_type)
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.loki_chucks_access_type)
     error_message = "loki_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
   }
 }
 
-variable "loki_storage_tier" {
-  description = "loki bucket storage tier: Standard or Archive."
+variable "loki_chucks_storage_tier" {
+  description = "loki chucks bucket storage tier: Standard or Archive."
   type        = string
   default     = "Standard"
 
   validation {
-    condition     = contains(["Standard", "Archive"], var.loki_storage_tier)
-    error_message = "loki_storage_tier must be either Standard or Archive."
+    condition     = contains(["Standard", "Archive"], var.loki_chucks_storage_tier)
+    error_message = "loki_chucks_storage_tier must be either Standard or Archive."
   }
 }
 
-variable "loki_auto_tiering" {
-  description = "loki bucket auto tiering setting: Disabled or InfrequentAccess."
+variable "loki_chucks_auto_tiering" {
+  description = "loki chucks bucket auto tiering setting: Disabled or InfrequentAccess."
   type        = string
   default     = "Disabled"
 
   validation {
-    condition     = contains(["Disabled", "InfrequentAccess"], var.loki_auto_tiering)
+    condition     = contains(["Disabled", "InfrequentAccess"], var.loki_chucks_auto_tiering)
     error_message = "loki_auto_tiering must be either Disabled or InfrequentAccess."
   }
 }
 
-variable "loki_versioning" {
-  description = "Enable object versioning on the loki bucket: Enabled or Disabled."
+variable "loki_chucks_versioning" {
+  description = "Enable object versioning on the loki chucks bucket: Enabled or Disabled."
   type        = string
   default     = "Disabled"
 
   validation {
-    condition     = contains(["Enabled", "Disabled"], var.loki_versioning)
-    error_message = "loki_versioning must be either Enabled or Disabled."
+    condition     = contains(["Enabled", "Disabled"], var.loki_chucks_versioning)
+    error_message = "loki_chucks_versioning must be either Enabled or Disabled."
   }
 }
 
-variable "loki_object_events_enabled" {
-  description = "Whether Object Storage events are enabled for the loki bucket."
+variable "loki_chucks_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the loki chucks bucket."
   type        = bool
   default     = false
 }
 
-variable "loki_kms_key_id" {
-  description = "Optional KMS key OCID for loki bucket encryption."
+variable "loki_chucks_kms_key_id" {
+  description = "Optional KMS key OCID for loki chucks bucket encryption."
+  type        = string
+  default     = null
+}
+
+variable "loki_ruler_bucket_name" {
+  description = "Name of the Loki Object Storage bucket."
+  type        = string
+  default     = "stg_loki_ruler_bucket"
+}
+
+variable "loki_ruler_access_type" {
+  description = "loki ruler bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+  type        = string
+  default     = "NoPublicAccess"
+
+  validation {
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.loki_ruler_access_type)
+    error_message = "loki_ruler_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+  }
+}
+
+variable "loki_ruler_storage_tier" {
+  description = "loki ruler bucket storage tier: Standard or Archive."
+  type        = string
+  default     = "Standard"
+
+  validation {
+    condition     = contains(["Standard", "Archive"], var.loki_ruler_storage_tier)
+    error_message = "loki_ruler_storage_tier must be either Standard or Archive."
+  }
+}
+
+variable "loki_ruler_auto_tiering" {
+  description = "loki ruler bucket auto tiering setting: Disabled or InfrequentAccess."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Disabled", "InfrequentAccess"], var.loki_ruler_auto_tiering)
+    error_message = "loki_ruler_auto_tiering must be either Disabled or InfrequentAccess."
+  }
+}
+
+variable "loki_ruler_versioning" {
+  description = "Enable object versioning on the loki ruler bucket: Enabled or Disabled."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.loki_ruler_versioning)
+    error_message = "loki_ruler_versioning must be either Enabled or Disabled."
+  }
+}
+
+variable "loki_ruler_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the loki ruler bucket."
+  type        = bool
+  default     = false
+}
+
+variable "loki_ruler_kms_key_id" {
+  description = "Optional KMS key OCID for loki ruler bucket encryption."
+  type        = string
+  default     = null
+}
+
+variable "loki_admin_bucket_name" {
+  description = "Name of the Loki Object Storage bucket."
+  type        = string
+  default     = "stg_loki_admin_bucket"
+}
+
+variable "loki_admin_access_type" {
+  description = "loki admin bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+  type        = string
+  default     = "NoPublicAccess"
+
+  validation {
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.loki_admin_access_type)
+    error_message = "loki_admin_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+  }
+}
+
+variable "loki_admin_storage_tier" {
+  description = "loki admin bucket storage tier: Standard or Archive."
+  type        = string
+  default     = "Standard"
+
+  validation {
+    condition     = contains(["Standard", "Archive"], var.loki_admin_storage_tier)
+    error_message = "loki_admin_storage_tier must be either Standard or Archive."
+  }
+}
+
+variable "loki_admin_auto_tiering" {
+  description = "loki admin bucket auto tiering setting: Disabled or InfrequentAccess."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Disabled", "InfrequentAccess"], var.loki_admin_auto_tiering)
+    error_message = "loki_admin_auto_tiering must be either Disabled or InfrequentAccess."
+  }
+}
+
+variable "loki_admin_versioning" {
+  description = "Enable object versioning on the loki admin bucket: Enabled or Disabled."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.loki_admin_versioning)
+    error_message = "loki_admin_versioning must be either Enabled or Disabled."
+  }
+}
+
+variable "loki_admin_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the loki admin bucket."
+  type        = bool
+  default     = false
+}
+
+variable "loki_admin_kms_key_id" {
+  description = "Optional KMS key OCID for loki chucks bucket encryption."
   type        = string
   default     = null
 }

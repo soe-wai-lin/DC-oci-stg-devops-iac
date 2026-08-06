@@ -58,37 +58,51 @@ resource "oci_identity_policy" "authentik_bucket_policy" {
 }
 
 ########################
-## Loki Bucket  ###
+## Loki Buckets  ###
 ########################
 
-resource "oci_objectstorage_bucket" "loki_bucket" {
+resource "oci_objectstorage_bucket" "loki_chucks_bucket" {
   compartment_id = oci_identity_compartment.data_compartment.id
   namespace      = data.oci_objectstorage_namespace.ns.namespace
-  name           = var.loki_bucket_name
+  name           = var.loki_chucks_bucket_name
 
-  access_type           = var.loki_access_type
-  storage_tier          = var.loki_storage_tier
-  auto_tiering          = var.loki_auto_tiering
-  versioning            = var.loki_versioning
-  object_events_enabled = var.loki_object_events_enabled
-  kms_key_id            = var.loki_kms_key_id
+  access_type           = var.loki_chucks_access_type
+  storage_tier          = var.loki_chucks_storage_tier
+  auto_tiering          = var.loki_chucks_auto_tiering
+  versioning            = var.loki_chucks_versioning
+  object_events_enabled = var.loki_chucks_object_events_enabled
+  kms_key_id            = var.loki_chucks_kms_key_id
   metadata              = var.metadata
   freeform_tags         = var.freeform_tags
 }
 
-# #####################################
-# ## IAM Policy for loki Bucket ##
-# #####################################
+resource "oci_objectstorage_bucket" "loki_ruler_bucket" {
+  compartment_id = oci_identity_compartment.data_compartment.id
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  name           = var.loki_ruler_bucket_name
 
-# resource "oci_identity_policy" "loki_bucket_policy" {
-#   name           = "${var.vcn_display_name}-loki_bucket_policy"
-#   compartment_id = var.tenancy_ocid
-#   provider = oci.home
-#   description    = "Policy to allow access to the loki Object Storage bucket."
+  access_type           = var.loki_ruler_access_type
+  storage_tier          = var.loki_ruler_storage_tier
+  auto_tiering          = var.loki_ruler_auto_tiering
+  versioning            = var.loki_ruler_versioning
+  object_events_enabled = var.loki_ruler_object_events_enabled
+  kms_key_id            = var.loki_ruler_kms_key_id
+  metadata              = var.metadata
+  freeform_tags         = var.freeform_tags
+}
 
-#   statements = [
-#     "Allow group ABDigital to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.loki_bucket.name}'",
-#     "Allow group ABDigital-Developer to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.loki_bucket.name}'"
-#   ]
-# }
+resource "oci_objectstorage_bucket" "loki_admin_bucket" {
+  compartment_id = oci_identity_compartment.data_compartment.id
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  name           = var.loki_admin_bucket_name
+
+  access_type           = var.loki_admin_access_type
+  storage_tier          = var.loki_admin_storage_tier
+  auto_tiering          = var.loki_admin_auto_tiering
+  versioning            = var.loki_admin_versioning
+  object_events_enabled = var.loki_admin_object_events_enabled
+  kms_key_id            = var.loki_admin_kms_key_id
+  metadata              = var.metadata
+  freeform_tags         = var.freeform_tags
+}
 
