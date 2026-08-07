@@ -568,6 +568,68 @@ variable "loki_admin_kms_key_id" {
   default     = null
 }
 
+variable "tempo_bucket_name" {
+  description = "Name of the Tempo Object Storage bucket."
+  type        = string
+  default     = "stg_tempo_bucket"
+}
+
+variable "tempo_access_type" {
+  description = "tempo bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+  type        = string
+  default     = "NoPublicAccess"
+
+  validation {
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.tempo_access_type)
+    error_message = "tempo_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+  }
+}
+
+variable "tempo_storage_tier" {
+  description = "tempo bucket storage tier: Standard or Archive."
+  type        = string
+  default     = "Standard"
+
+  validation {
+    condition     = contains(["Standard", "Archive"], var.tempo_storage_tier)
+    error_message = "tempo_storage_tier must be either Standard or Archive."
+  }
+}
+
+variable "tempo_auto_tiering" {
+  description = "tempo bucket auto tiering setting: Disabled or InfrequentAccess."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Disabled", "InfrequentAccess"], var.tempo_auto_tiering)
+    error_message = "tempo_auto_tiering must be either Disabled or InfrequentAccess."
+  }
+}
+
+variable "tempo_versioning" {
+  description = "Enable object versioning on the tempo bucket: Enabled or Disabled."
+  type        = string
+  default     = "Disabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.tempo_versioning)
+    error_message = "tempo_versioning must be either Enabled or Disabled."
+  }
+}
+
+variable "tempo_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the tempo bucket."
+  type        = bool
+  default     = false
+}
+
+variable "tempo_kms_key_id" {
+  description = "Optional KMS key OCID for tempo bucket encryption."
+  type        = string
+  default     = null
+}
+
 
 
 ##############################

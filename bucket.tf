@@ -106,3 +106,18 @@ resource "oci_objectstorage_bucket" "loki_admin_bucket" {
   freeform_tags         = var.freeform_tags
 }
 
+resource "oci_objectstorage_bucket" "tempo_bucket" {
+  compartment_id = oci_identity_compartment.data_compartment.id
+  namespace      = data.oci_objectstorage_namespace.ns.namespace
+  name           = var.tempo_bucket_name
+
+  access_type           = var.tempo_access_type
+  storage_tier          = var.tempo_storage_tier
+  auto_tiering          = var.tempo_auto_tiering
+  versioning            = var.tempo_versioning
+  object_events_enabled = var.tempo_object_events_enabled
+  kms_key_id            = var.tempo_kms_key_id
+  metadata              = var.metadata
+  freeform_tags         = var.freeform_tags
+}
+
