@@ -420,6 +420,24 @@ resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_lo
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "nsg_prod_lb_ingress_tempo_3200" {
+  network_security_group_id = oci_core_network_security_group.nsg_prod_lb.id
+  direction                 = "INGRESS"
+  protocol                  = "6"
+  # source                    = "0.0.0.0/0"
+  source                    = var.lb_subnet_cidr
+  source_type               = "CIDR_BLOCK"
+  description               = "Allow tempo port to Load Balancer."
+
+  # Optional: Restrict to ping only (echo request = type 8)
+  tcp_options {
+    destination_port_range {
+      min = 3200
+      max = 3200
+    }
+  }
+}
+
 # For multiple egress target , create "local" data
 
 locals {
