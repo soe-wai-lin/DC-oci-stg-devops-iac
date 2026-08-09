@@ -1537,15 +1537,18 @@ jobs:
           helm repo add grafana https://grafana.github.io/helm-charts || true
           helm repo update
 
-          # Skip install if already exists
-          if helm status loki -n monitoring > /dev/null 2>&1; then
-            echo "loki already installed, skipping..."
-          else
-            echo "Installing loki..."
+          helm upgrade --install loki grafana/loki \
+          --namespace monitoring -f ./observability/loki-custom-values.yml
 
-            helm upgrade --install loki grafana/loki \
-            --namespace monitoring -f ./observability/loki-custom-values.yml
-          fi
+          # # Skip install if already exists
+          # if helm status loki -n monitoring > /dev/null 2>&1; then
+          #   echo "loki already installed, skipping..."
+          # else
+          #   echo "Installing loki..."
+
+          #   helm upgrade --install loki grafana/loki \
+          #   --namespace monitoring -f ./observability/loki-custom-values.yml
+          # fi
 
 
 
