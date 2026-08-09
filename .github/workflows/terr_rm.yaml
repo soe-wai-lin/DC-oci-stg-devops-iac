@@ -1550,7 +1550,7 @@ jobs:
             echo "Installing loki..."
 
             helm upgrade --install loki grafana/loki-stack \
-            --namespace monitoring -f ../../observability/loki-custom-values.yml
+            --namespace monitoring -f ./observability/loki-custom-values.yml
           fi
 
 
