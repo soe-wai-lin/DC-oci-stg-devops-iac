@@ -1550,6 +1550,52 @@ jobs:
           #   --namespace monitoring -f ./observability/loki-custom-values.yml
           # fi
 
+      - name: Tempo Setup
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+          # Add repo if not already added
+          helm repo add grafana https://grafana.github.io/helm-charts || true
+          helm repo update
+
+          helm upgrade --install tempo grafana/tempo \
+          --namespace monitoring -f ./observability/tempo-custom-values.yml
+
+          # # Skip install if already exists
+          # if helm status tempo -n monitoring > /dev/null 2>&1; then
+          #   echo "tempo already installed, skipping..."
+          # else
+          #   echo "Installing tempo..."
+
+          #   helm upgrade --install tempo grafana/tempo \
+          #   --namespace monitoring -f ./observability/tempo-custom-values.yml
+          # fi
+
+      - name: OTEL Setup
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+          # Add repo if not already added
+          helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts || true
+          helm repo update
+
+          helm upgrade --install otel open-telemetry/opentelemetry-collector \
+          --namespace monitoring -f ./observability/otel-custom-values.yml
+
+          # # Skip install if already exists
+          # if helm status otel -n monitoring > /dev/null 2>&1; then
+          #   echo "otel already installed, skipping..."
+          # else
+          #   echo "Installing otel..."
+
+          #   helm upgrade --install otel open-telemetry/opentelemetry-collector \
+          #   --namespace monitoring -f ./observability/otel-custom-values.yml
+          # fi
+
 
 
   

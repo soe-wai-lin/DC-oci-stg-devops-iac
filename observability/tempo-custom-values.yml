@@ -1,0 +1,43 @@
+tempo:
+  storage:
+    trace:
+      backend: s3
+
+      s3:
+        bucket: stg_tempo_bucket
+
+        endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+
+        region: ap-singapore-1
+
+        access_key: 2566db95047398fff3ee9c1150ea6ca77164035e
+
+        secret_key: 2z3Djc5qTiFtWf6sBPI1d8NJ151E0vEPeSsszAErWuQ=
+
+        insecure: false
+
+  retention: 720h
+
+# service:
+#   type: ClusterIP
+
+service:
+  type: LoadBalancer
+
+  annotations:
+
+    oci.oraclecloud.com/load-balancer-type: "lb"
+
+    service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+
+    oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
+
+    service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
+
+    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
