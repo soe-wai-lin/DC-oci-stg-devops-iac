@@ -1527,6 +1527,26 @@ jobs:
             --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="lb"
           fi
 
+      - name: Loki Setup
+        run: |
+          export KUBECONFIG="$HOME/.kube/config"
+
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+          # Add repo if not already added
+          helm repo add grafana https://grafana.github.io/helm-charts || true
+          helm repo update
+
+          # Skip install if already exists
+          if helm status loki -n monitoring > /dev/null 2>&1; then
+            echo "loki already installed, skipping..."
+          else
+            echo "Installing loki..."
+
+            helm upgrade --install loki grafana/loki-stack \
+            --namespace monitoring -f ../observability/loki-customvalues.yaml
+          fi
+
 
 
   
