@@ -1526,12 +1526,6 @@ jobs:
             --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-security-list-management-mode"="None" \
             --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="lb"
           fi
-      
-      - name: Check for loki-custom-values.yml
-        run: |
-          pwd
-          ls -al
-          find . -name "loki-custom-values.yml"
 
       - name: Loki Setup
         run: |
@@ -1549,7 +1543,7 @@ jobs:
           else
             echo "Installing loki..."
 
-            helm upgrade --install loki grafana/loki-stack \
+            helm upgrade --install loki grafana/loki \
             --namespace monitoring -f ./observability/loki-custom-values.yml
           fi
 
