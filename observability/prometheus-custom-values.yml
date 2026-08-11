@@ -1,0 +1,46 @@
+prometheus:
+  prometheusSpec:
+    retention: 90d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: oci-bv # or your StorageClass
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 200Gi
+
+    additionalScrapeConfigs:
+      - job_name: "blackbox-http"
+        metrics_path: /probe
+        params:
+          module: [http_2xx]
+        static_configs:
+          - targets:
+              - https://cms.sandbox.airborneo.com
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - target_label: __address__
+            replacement: blackbox-prometheus-blackbox-exporter:9115
+          - source_labels: [__param_target]
+            target_label: instance
+
+        # gRPC check
+      - job_name: "blackbox-grpc"
+        metrics_path: /probe
+        params:
+          module: [grpc_health]
+        static_configs:
+          - targets:
+              - grpc-api.sandbox.airborneo.com:50051
+
+        relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+
+        - source_labels: [__param_target]
+          target_label: instance
+
+        - target_label: __address__
+          replacement: blackbox-prometheus-blackbox-exporter:9115
