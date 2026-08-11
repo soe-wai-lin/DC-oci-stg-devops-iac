@@ -33,7 +33,7 @@ prometheus:
           module: [grpc_health]
         static_configs:
           - targets:
-              - grpc-api.sandbox.airborneo.com:50051
+              - service.airborneo-backend-service-user.svc.cluster.local:8080
 
         relabel_configs:
         - source_labels: [__address__]

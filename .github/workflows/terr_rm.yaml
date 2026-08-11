@@ -1318,39 +1318,6 @@ jobs:
           helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter -f ./observability/blackbox-custom-values.yml \
             --namespace monitoring
 
-          # cat <<EOF > values.yaml
-          # ---
-          # prometheus:
-          #   prometheusSpec:
-          #     retention: 90d
-          #     storageSpec:
-          #       volumeClaimTemplate:
-          #         spec:
-          #           storageClassName: oci-bv   # or your StorageClass
-          #           accessModes: ["ReadWriteOnce"]
-          #           resources:
-          #             requests:
-          #               storage: 200Gi
-
-          #     additionalScrapeConfigs:
-          #       - job_name: 'blackbox-http'
-          #         metrics_path: /probe
-          #         params:
-          #           module: [http_2xx]
-          #         static_configs:
-          #           - targets:
-          #               - https://cms.sandbox.airborneo.com
-          #         relabel_configs:
-          #           - source_labels: [__address__]
-          #             target_label: __param_target
-          #           - target_label: __address__
-          #             replacement: blackbox-prometheus-blackbox-exporter:9115
-          #           - source_labels: [__param_target]
-          #             target_label: instance
-          # EOF
-
-          # cat values.yaml
-
           # # Skip prometheus install if release already exists
           # if helm status kube-prometheus-stack -n monitoring > /dev/null 2>&1; then
           #   echo "kube-prometheus-stack Helm release already exists in monitoring, skipping Helm install."

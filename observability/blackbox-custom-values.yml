@@ -15,5 +15,5 @@ config:
       prober: grpc
       timeout: 5s
       grpc:
-        tls: true
+        tls: false     # because of "appProtocol: kubernetes.io/h2c" in the grpc Service definition
         preferred_ip_protocol: ip4
