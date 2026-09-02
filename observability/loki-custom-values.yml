@@ -85,14 +85,14 @@ loki:
           prefix: index_
           period: 24h
 
-  # storage:
+  storage:
 
-  #   type: s3
+    type: s3
 
-  #   bucketNames:
-  #     chunks: stg_loki_chunks_bucket
-  #     ruler: stg_loki_ruler_bucket
-  #     admin: stg_loki_admin_bucket
+    bucketNames:
+      chunks: stg_loki_chunks_bucket
+      # ruler: stg_loki_ruler_bucket
+      # admin: stg_loki_admin_bucket
 
   #   s3:
 
