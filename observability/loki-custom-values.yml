@@ -91,7 +91,7 @@ loki:
 
     bucketNames:
       chunks: stg_loki_chunks_bucket
-      # ruler: stg_loki_ruler_bucket
+      ruler: stg_loki_ruler_bucket
       # admin: stg_loki_admin_bucket
 
   #   s3:
