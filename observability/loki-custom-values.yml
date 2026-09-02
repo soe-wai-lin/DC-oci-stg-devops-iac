@@ -85,28 +85,28 @@ loki:
           prefix: index_
           period: 24h
 
-  storage:
+  # storage:
 
-    type: s3
+  #   type: s3
 
-    bucketNames:
-      chunks: stg_loki_chunks_bucket
-      ruler: stg_loki_ruler_bucket
-      admin: stg_loki_admin_bucket
+  #   bucketNames:
+  #     chunks: stg_loki_chunks_bucket
+  #     ruler: stg_loki_ruler_bucket
+  #     admin: stg_loki_admin_bucket
 
-    s3:
+  #   s3:
 
-      endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+  #     endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
 
-      region: ap-singapore-1
+  #     region: ap-singapore-1
 
-      accessKeyId: 2566db95047398fff3ee9c1150ea6ca77164035e
+  #     accessKeyId: 2566db95047398fff3ee9c1150ea6ca77164035e
 
-      secretAccessKey: 2z3Djc5qTiFtWf6sBPI1d8NJ151E0vEPeSsszAErWuQ=
+  #     secretAccessKey: 2z3Djc5qTiFtWf6sBPI1d8NJ151E0vEPeSsszAErWuQ=
 
-      s3ForcePathStyle: true
+  #     s3ForcePathStyle: true
 
-      insecure: false
+  #     insecure: false
 
 gateway:
   enabled: false
