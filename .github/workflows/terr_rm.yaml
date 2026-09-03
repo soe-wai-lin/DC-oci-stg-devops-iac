@@ -1586,20 +1586,52 @@ jobs:
                     prefix: index_
                     period: 24h
             
+            # storage:
+            #   type: s3
+            #   bucketNames:
+            #     chunks: stg_loki_chunks_bucket
+            #     ruler: stg_loki_ruler_bucket
+            #     admin: stg_loki_admin_bucket
+
+            #   s3:
+            #     endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+            #     region: ap-singapore-1
+            #     accessKeyId: ${{ secrets.OCI_ACCESSKEYID }}
+            #     secretAccessKey: ${{ secrets.OCI_SECRETACCESSKEY }}
+            #     s3ForcePathStyle: true
+            #     insecure: false
+
             storage:
               type: s3
+              # Use Thanos object storage client
+              use_thanos_objstore: true
               bucketNames:
                 chunks: stg_loki_chunks_bucket
                 ruler: stg_loki_ruler_bucket
                 admin: stg_loki_admin_bucket
 
-              s3:
-                endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
-                region: ap-singapore-1
-                accessKeyId: ${{ secrets.OCI_ACCESSKEYID }}
-                secretAccessKey: ${{ secrets.OCI_SECRETACCESSKEY }}
-                s3ForcePathStyle: true
-                insecure: false
+              # Thanos object-store configuration
+              object_store:
+                type: s3
+                storage_prefix: ""
+
+                s3:
+                  endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+                  region: ap-singapore-1
+                  accessKeyId: ${{ secrets.OCI_ACCESSKEYID }}
+                  secretAccessKey: ${{ secrets.OCI_SECRETACCESSKEY }}
+                  bucket_lookup_type: path
+                
+              # =======================================================
+              # Storage config
+              # =======================================================
+              storage_config:
+                tsdb_shipper:
+                  index_gateway_client:
+                   server_address: ""
+                bloom_shipper:
+                  working_directory: /var/loki/data/bloomshipper
+
 
           gateway:
             enabled: false
