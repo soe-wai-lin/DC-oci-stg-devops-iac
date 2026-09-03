@@ -61,15 +61,15 @@ loki:
     working_directory: /var/loki/compactor
     delete_request_store: filesystem
 
-  # distributor:
-  #   otlp_config:
-  #     default_resource_attributes_as_index_labels:
-  #       - service.name
-  #       - service.namespace
-  #       - service.instance.id
-  #       - k8s.namespace.name
-  #       - k8s.pod.name
-  #       - k8s.container.name
+  distributor:
+    otlp_config:
+      default_resource_attributes_as_index_labels:
+        - service.name
+        - service.namespace
+        - service.instance.id
+        - k8s.namespace.name
+        - k8s.pod.name
+        - k8s.container.name
 
   commonConfig:
     replication_factor: 1
@@ -89,7 +89,7 @@ loki:
 
     type: s3
 
-    use_thanos_objstore: true
+    use_thanos_objstore: false
 
     bucketNames:
       chunks: stg_loki_chunks_bucket
