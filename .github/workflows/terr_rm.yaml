@@ -1614,9 +1614,6 @@ jobs:
           helm upgrade --install loki grafana/loki \
           --namespace monitoring -f loki-custom-values.yaml
 
-          # helm upgrade --install loki grafana/loki \
-          # --namespace monitoring -f ./observability/loki-custom-values.yml
-
           # # Skip install if already exists
           # if helm status loki -n monitoring > /dev/null 2>&1; then
           #   echo "loki already installed, skipping..."
@@ -1637,8 +1634,50 @@ jobs:
           helm repo add grafana https://grafana.github.io/helm-charts || true
           helm repo update
 
+          cat <<EOF > tempo-custom-values.yaml
+          tempo:
+            storage:
+              trace:
+                backend: s3
+
+                s3:
+                  bucket: stg_tempo_bucket
+
+                  endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+
+                  region: ap-singapore-1
+
+                  access_key: ${{ secrets.OCI_ACCESSKEYID }}
+
+                  secret_key: ${{ secrets.OCI_SECRETACCESSKEY }}
+
+                  insecure: false
+
+            retention: 720h
+
+          service:
+            type: LoadBalancer
+            annotations:
+              oci.oraclecloud.com/load-balancer-type: "lb"
+
+              service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+
+              oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
+
+              service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
+
+              service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+
+              service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+
+              service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+
+              service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
+          EOF
+
           helm upgrade --install tempo grafana/tempo \
-          --namespace monitoring -f ./observability/tempo-custom-values.yml
+          --namespace monitoring -f tempo-custom-values.yaml
+          
 
           # # Skip install if already exists
           # if helm status tempo -n monitoring > /dev/null 2>&1; then
