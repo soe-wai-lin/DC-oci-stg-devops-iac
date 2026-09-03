@@ -1586,20 +1586,20 @@ jobs:
                   prefix: index_
                   period: 24h
             
-          storage:
-            type: s3
-            bucketNames:
-              chunks: stg_loki_chunks_bucket
-              ruler: stg_loki_ruler_bucket
-              admin: stg_loki_admin_bucket
+            storage:
+              type: s3
+              bucketNames:
+                chunks: stg_loki_chunks_bucket
+                 ruler: stg_loki_ruler_bucket
+                admin: stg_loki_admin_bucket
 
-            s3:
-              endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
-              region: ap-singapore-1
-              accessKeyId: ${{ secrets.OCI_ACCESSKEYID }}
-              secretAccessKey: ${{ secrets.OCI_SECRETACCESSKEY }}
-              s3ForcePathStyle: true
-              insecure: false
+              s3:
+                endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+                region: ap-singapore-1
+                accessKeyId: ${{ secrets.OCI_ACCESSKEYID }}
+                secretAccessKey: ${{ secrets.OCI_SECRETACCESSKEY }}
+                s3ForcePathStyle: true
+                insecure: false
 
           gateway:
             enabled: false
