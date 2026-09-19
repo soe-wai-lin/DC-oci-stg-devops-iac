@@ -99,6 +99,7 @@ jobs:
 
           PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
             --stack-id "${STACK_ID}" \
+            --region ap-singapore-1 \
             --display-name "gha-plan-${GITHUB_RUN_NUMBER}" \
             --job-operation-details-is-provider-upgrade-required "${UPGRADE}" \
             --wait-for-state ACCEPTED \
