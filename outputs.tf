@@ -72,55 +72,55 @@ output "stg_vcn_name" {
 
 
 
-####################
-### Redis        ###
-####################
+# ####################
+# ### Redis        ###
+# ####################
 
-output "redis_cluster_id" {
-  description = "OCID of the Redis cluster."
-  value       = oci_redis_redis_cluster.redis.id
-}
+# output "redis_cluster_id" {
+#   description = "OCID of the Redis cluster."
+#   value       = oci_redis_redis_cluster.redis.id
+# }
 
-output "redis_cluster_display_name" {
-  description = "Display name of the Redis cluster."
-  value       = data.oci_redis_redis_cluster.redis.display_name
-}
+# output "redis_cluster_display_name" {
+#   description = "Display name of the Redis cluster."
+#   value       = data.oci_redis_redis_cluster.redis.display_name
+# }
 
-output "redis_cluster_mode" {
-  description = "Redis cluster mode."
-  value       = data.oci_redis_redis_cluster.redis.cluster_mode
-}
+# output "redis_cluster_mode" {
+#   description = "Redis cluster mode."
+#   value       = data.oci_redis_redis_cluster.redis.cluster_mode
+# }
 
-output "redis_primary_fqdn" {
-  description = "Primary node FQDN."
-  value       = try(data.oci_redis_redis_cluster.redis.primary_fqdn, null)
-}
+# output "redis_primary_fqdn" {
+#   description = "Primary node FQDN."
+#   value       = try(data.oci_redis_redis_cluster.redis.primary_fqdn, null)
+# }
 
-output "redis_primary_ip" {
-  description = "Primary node private IP."
-  value       = try(data.oci_redis_redis_cluster.redis.primary_endpoint_ip_address, null)
-}
+# output "redis_primary_ip" {
+#   description = "Primary node private IP."
+#   value       = try(data.oci_redis_redis_cluster.redis.primary_endpoint_ip_address, null)
+# }
 
-output "redis_discovery_fqdn" {
-  description = "Discovery FQDN for sharded clusters."
-  value       = try(data.oci_redis_redis_cluster.redis.discovery_fqdn, null)
-}
+# output "redis_discovery_fqdn" {
+#   description = "Discovery FQDN for sharded clusters."
+#   value       = try(data.oci_redis_redis_cluster.redis.discovery_fqdn, null)
+# }
 
-output "redis_discovery_ip" {
-  description = "Discovery IP for sharded clusters."
-  value       = try(data.oci_redis_redis_cluster.redis.discovery_endpoint_ip_address, null)
-}
+# output "redis_discovery_ip" {
+#   description = "Discovery IP for sharded clusters."
+#   value       = try(data.oci_redis_redis_cluster.redis.discovery_endpoint_ip_address, null)
+# }
 
-output "redis_node_endpoints" {
-  description = "List of per-node private endpoints."
-  value = [
-    for node in try(data.oci_redis_redis_cluster.redis.node_collection[0].items, []) : {
-      display_name                = try(node.display_name, null)
-      private_endpoint_fqdn       = try(node.private_endpoint_fqdn, null)
-      private_endpoint_ip_address = try(node.private_endpoint_ip_address, null)
-    }
-  ]
-}
+# output "redis_node_endpoints" {
+#   description = "List of per-node private endpoints."
+#   value = [
+#     for node in try(data.oci_redis_redis_cluster.redis.node_collection[0].items, []) : {
+#       display_name                = try(node.display_name, null)
+#       private_endpoint_fqdn       = try(node.private_endpoint_fqdn, null)
+#       private_endpoint_ip_address = try(node.private_endpoint_ip_address, null)
+#     }
+#   ]
+# }
 
 
 ##################
@@ -203,23 +203,23 @@ output "stg_bucket_approximate_size" {
 # #   }, null)
 # # }
 
-# ##################################
-# ###### Network Path Analyzer   ###
-# ##################################
+# # ##################################
+# # ###### Network Path Analyzer   ###
+# # ##################################
 
-output "airs_to_redis_npa_test_id" {
-  value = oci_vn_monitoring_path_analyzer_test.airs_to_redis_subnet_connectivity.id
-}
+# output "airs_to_redis_npa_test_id" {
+#   value = oci_vn_monitoring_path_analyzer_test.airs_to_redis_subnet_connectivity.id
+# }
 
-output "airs_pod_to_redis_npa_test_id" {
-  value = oci_vn_monitoring_path_analyzer_test.airs_pod_to_redis_subnet_connectivity.id
-}
-output "airs_to_db_npa_test_id" {
-  value = oci_vn_monitoring_path_analyzer_test.airs_to_db_subnet_connectivity.id
-}
-output "airs_pod_to_db_npa_test_id" {
-  value = oci_vn_monitoring_path_analyzer_test.airs_pod_to_db_subnet_connectivity.id
-}
+# output "airs_pod_to_redis_npa_test_id" {
+#   value = oci_vn_monitoring_path_analyzer_test.airs_pod_to_redis_subnet_connectivity.id
+# }
+# output "airs_to_db_npa_test_id" {
+#   value = oci_vn_monitoring_path_analyzer_test.airs_to_db_subnet_connectivity.id
+# }
+# output "airs_pod_to_db_npa_test_id" {
+#   value = oci_vn_monitoring_path_analyzer_test.airs_pod_to_db_subnet_connectivity.id
+# }
 # output "web_pod_to_db_npa_test_id" {
 #   value = oci_vn_monitoring_path_analyzer_test.web_pod_to_db_subnet_connectivity.id
 # }
@@ -261,39 +261,39 @@ output "airs_pod_to_db_npa_test_id" {
 #   value = oci_vn_monitoring_path_analyzer_test.cms_pod_to_redis_subnet_connectivity.id
 # }
 
-# ################
-# ##    OKE    ###
-# ################
+# # ################
+# # ##    OKE    ###
+# # ################
 
-output "airs_oke_cluster_ocid" {
-  description = "AIRS OKE cluster OCID"
-  value       = oci_containerengine_cluster.stg_oke.id
-}
-output "stg_lb_subnet_ocid" {
-  description = "Load balancer subnet OCID"
-  value       = oci_core_subnet.lb_subnet.id
-}
-output "stg_lb_nsg_ocid" {
-  description = "PROD Load balancer NSG OCID"
-  value       = oci_core_network_security_group.nsg_prod_lb.id
-}
-output "stg_bastion_public_ip" {
-  value = oci_core_instance.bastion.public_ip
-}
+# output "airs_oke_cluster_ocid" {
+#   description = "AIRS OKE cluster OCID"
+#   value       = oci_containerengine_cluster.stg_oke.id
+# }
+# output "stg_lb_subnet_ocid" {
+#   description = "Load balancer subnet OCID"
+#   value       = oci_core_subnet.lb_subnet.id
+# }
+# output "stg_lb_nsg_ocid" {
+#   description = "PROD Load balancer NSG OCID"
+#   value       = oci_core_network_security_group.nsg_prod_lb.id
+# }
+# output "stg_bastion_public_ip" {
+#   value = oci_core_instance.bastion.public_ip
+# }
 # output "stg_lb_reserved_public_ip_ocid" {
 #   description = "AIRS Reserved public IP OCID for the OKE load balancer"
 #   value       = oci_core_public_ip.airs_cluster_lb_reserved_ip.ip_address
 # }
 
-output "oke_worker_node_image_id" {
-  value = local.airs_worker_node_image_id
-  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
-}
+# output "oke_worker_node_image_id" {
+#   value = local.airs_worker_node_image_id
+#   description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+# }
 
-output "oke_system_node_image_id" {
-  value = local.airs_system_node_image_id
-  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
-}
+# output "oke_system_node_image_id" {
+#   value = local.airs_system_node_image_id
+#   description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+# }
 
 # # output "cms_oke_cluster_ocid" {
 # #   description = "CMS OKE cluster OCID"
