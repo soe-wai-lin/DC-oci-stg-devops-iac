@@ -1076,652 +1076,652 @@ jobs:
           name: rm_outputs
           path: rm_outputs.json
 
-  create_stg_prometheus_lb_service:
-    name: STG Ingress-Nginx and Prometheus LoadBalancer
-    runs-on: ubuntu-latest
-    needs: apply
+  # create_stg_prometheus_lb_service:
+  #   name: STG Ingress-Nginx and Prometheus LoadBalancer
+  #   runs-on: ubuntu-latest
+  #   needs: apply
 
-    env:
-      OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
-      OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
-      OCI_REGION: ${{ secrets.OCI_REGION }}
-      OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
-      OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
-      OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
+  #   env:
+  #     OCI_USER_OCID: ${{ secrets.OCI_USER_OCID }}
+  #     OCI_TENANCY_OCID: ${{ secrets.OCI_TENANCY_OCID }}
+  #     OCI_REGION: ${{ secrets.OCI_REGION }}
+  #     OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
+  #     OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+  #     OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
 
-    steps:
-      - name: Download RM outputs artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: rm_outputs
+  #   steps:
+  #     - name: Download RM outputs artifact
+  #       uses: actions/download-artifact@v8
+  #       with:
+  #         name: rm_outputs
 
-      - name: List download file
-        run: | 
-          pwd
-          ls -al
+  #     - name: List download file
+  #       run: | 
+  #         pwd
+  #         ls -al
 
-      - name: Parse RM outputs
-        shell: bash
-        run: |
-          set -euo pipefail
+  #     - name: Parse RM outputs
+  #       shell: bash
+  #       run: |
+  #         set -euo pipefail
 
-          BASTION_PUBLIC_IP=$(jq -r '.data.items[] | select(."output-name"=="stg_bastion_public_ip") | ."output-value"' rm_outputs.json)
-          STG_OKE_CLUSTER_OCID=$(jq -r '.data.items[] | select(."output-name"=="airs_oke_cluster_ocid") | ."output-value"' rm_outputs.json)
-          LB_SUBNET_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_subnet_ocid") | ."output-value"' rm_outputs.json)
-          LB_NSG_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_nsg_ocid") | ."output-value"' rm_outputs.json)
-          # LB_RESERVED_PUBLIC_IP_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_reserved_public_ip_ocid") | ."output-value"' rm_outputs.json)
+  #         BASTION_PUBLIC_IP=$(jq -r '.data.items[] | select(."output-name"=="stg_bastion_public_ip") | ."output-value"' rm_outputs.json)
+  #         STG_OKE_CLUSTER_OCID=$(jq -r '.data.items[] | select(."output-name"=="airs_oke_cluster_ocid") | ."output-value"' rm_outputs.json)
+  #         LB_SUBNET_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_subnet_ocid") | ."output-value"' rm_outputs.json)
+  #         LB_NSG_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_nsg_ocid") | ."output-value"' rm_outputs.json)
+  #         # LB_RESERVED_PUBLIC_IP_OCID=$(jq -r '.data.items[] | select(."output-name"=="stg_lb_reserved_public_ip_ocid") | ."output-value"' rm_outputs.json)
 
-          for v in STG_OKE_CLUSTER_OCID LB_SUBNET_OCID LB_NSG_OCID; do
-            val="${!v:-}"
-            if [ -z "${val}" ] || [ "${val}" = "null" ]; then
-              echo "::error::${v} is empty or null"
-              exit 1
-            fi
-          done
+  #         for v in STG_OKE_CLUSTER_OCID LB_SUBNET_OCID LB_NSG_OCID; do
+  #           val="${!v:-}"
+  #           if [ -z "${val}" ] || [ "${val}" = "null" ]; then
+  #             echo "::error::${v} is empty or null"
+  #             exit 1
+  #           fi
+  #         done
  
-          echo "BASTION_PUBLIC_IP=${BASTION_PUBLIC_IP}" >> "$GITHUB_ENV"
-          echo "STG_OKE_CLUSTER_OCID=${STG_OKE_CLUSTER_OCID}" >> "$GITHUB_ENV"
-          echo "LB_SUBNET_OCID=${LB_SUBNET_OCID}" >> "$GITHUB_ENV"
-          echo "LB_NSG_OCID=${LB_NSG_OCID}" >> "$GITHUB_ENV"
-          # echo "LB_RESERVED_PUBLIC_IP_OCID=${LB_RESERVED_PUBLIC_IP_OCID}" >> "$GITHUB_ENV"
+  #         echo "BASTION_PUBLIC_IP=${BASTION_PUBLIC_IP}" >> "$GITHUB_ENV"
+  #         echo "STG_OKE_CLUSTER_OCID=${STG_OKE_CLUSTER_OCID}" >> "$GITHUB_ENV"
+  #         echo "LB_SUBNET_OCID=${LB_SUBNET_OCID}" >> "$GITHUB_ENV"
+  #         echo "LB_NSG_OCID=${LB_NSG_OCID}" >> "$GITHUB_ENV"
+  #         # echo "LB_RESERVED_PUBLIC_IP_OCID=${LB_RESERVED_PUBLIC_IP_OCID}" >> "$GITHUB_ENV"
 
 
-      - name: Checkout repo
-        uses: actions/checkout@v6
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v6
 
-      - name: Install OCI CLI
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install oci-cli
+  #     - name: Install OCI CLI
+  #       run: |
+  #         python3 -m pip install --upgrade pip
+  #         python3 -m pip install oci-cli
 
-      - name: Configure OCI CLI
-        shell: bash
-        run: |
-          set -euo pipefail
+  #     - name: Configure OCI CLI
+  #       shell: bash
+  #       run: |
+  #         set -euo pipefail
 
-          mkdir -p ~/.oci
-          chmod 700 ~/.oci
+  #         mkdir -p ~/.oci
+  #         chmod 700 ~/.oci
 
-          printf '%s\n' "${OCI_PRIVATE_KEY}" > ~/.oci/oci_api_key.pem
-          chmod 600 ~/.oci/oci_api_key.pem
+  #         printf '%s\n' "${OCI_PRIVATE_KEY}" > ~/.oci/oci_api_key.pem
+  #         chmod 600 ~/.oci/oci_api_key.pem
 
-          cat > ~/.oci/config <<EOF
-          [DEFAULT]
-          user=${OCI_USER_OCID}
-          tenancy=${OCI_TENANCY_OCID}
-          region=${OCI_REGION}
-          fingerprint=${OCI_FINGERPRINT}
-          key_file=${HOME}/.oci/oci_api_key.pem
-          EOF
+  #         cat > ~/.oci/config <<EOF
+  #         [DEFAULT]
+  #         user=${OCI_USER_OCID}
+  #         tenancy=${OCI_TENANCY_OCID}
+  #         region=${OCI_REGION}
+  #         fingerprint=${OCI_FINGERPRINT}
+  #         key_file=${HOME}/.oci/oci_api_key.pem
+  #         EOF
 
-          chmod 600 ~/.oci/config
+  #         chmod 600 ~/.oci/config
 
-      - name: Install kubectl
-        uses: Azure/setup-kubectl@v5.1.0
-        with:
-          version: latest
+  #     - name: Install kubectl
+  #       uses: Azure/setup-kubectl@v5.1.0
+  #       with:
+  #         version: latest
     
-      - name: Get OKE private API endpoint
-        shell: bash
-        run: |
-          set -euo pipefail
+  #     - name: Get OKE private API endpoint
+  #       shell: bash
+  #       run: |
+  #         set -euo pipefail
 
-          ENDPOINT=$(oci ce cluster get \
-            --cluster-id "$STG_OKE_CLUSTER_OCID" \
-            --region ap-singapore-1 \
-            | jq -r '.data.endpoints."private-endpoint"')
+  #         ENDPOINT=$(oci ce cluster get \
+  #           --cluster-id "$STG_OKE_CLUSTER_OCID" \
+  #           --region ap-singapore-1 \
+  #           | jq -r '.data.endpoints."private-endpoint"')
 
-          if [[ -z "$ENDPOINT" || "$ENDPOINT" == "null" ]]; then
-             echo "::error::Private endpoint not found"
-             exit 1
-          fi
+  #         if [[ -z "$ENDPOINT" || "$ENDPOINT" == "null" ]]; then
+  #            echo "::error::Private endpoint not found"
+  #            exit 1
+  #         fi
 
-          # Example: https://10.0.1.6:6443
-          HOSTPORT="${ENDPOINT#https://}"
-          OKE_API_PRIVATE_IP="${HOSTPORT%%:*}"
-          OKE_API_PRIVATE_PORT="${HOSTPORT##*:}"
+  #         # Example: https://10.0.1.6:6443
+  #         HOSTPORT="${ENDPOINT#https://}"
+  #         OKE_API_PRIVATE_IP="${HOSTPORT%%:*}"
+  #         OKE_API_PRIVATE_PORT="${HOSTPORT##*:}"
 
-          echo "OKE_API_PRIVATE_IP=$OKE_API_PRIVATE_IP" >> $GITHUB_ENV
-          echo "OKE_API_PRIVATE_PORT=$OKE_API_PRIVATE_PORT" >> $GITHUB_ENV
+  #         echo "OKE_API_PRIVATE_IP=$OKE_API_PRIVATE_IP" >> $GITHUB_ENV
+  #         echo "OKE_API_PRIVATE_PORT=$OKE_API_PRIVATE_PORT" >> $GITHUB_ENV
 
-          echo "OKE private API: $OKE_API_PRIVATE_IP:$OKE_API_PRIVATE_PORT"
+  #         echo "OKE private API: $OKE_API_PRIVATE_IP:$OKE_API_PRIVATE_PORT"
       
-      - name: Start SSH tunnel via bastion
-        shell: bash
-        env:
-          BASTION_SSH_PRIVATE_KEY: ${{ secrets.BASTION_SSH_PRIVATE_KEY }}
-          BASTION_USER: ${{ secrets.BASTION_USER }}
-          OKE_API_PRIVATE_IP: ${{ env.OKE_API_PRIVATE_IP }}
-          OKE_API_PRIVATE_PORT: ${{ env.OKE_API_PRIVATE_PORT }}
-          OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
-        run: |
-         set -euo pipefail
-
-         mkdir -p ~/.ssh
-         echo "$BASTION_SSH_PRIVATE_KEY" > ~/.ssh/bastion.pem
-         chmod 600 ~/.ssh/bastion.pem
-
-         ssh -i ~/.ssh/bastion.pem \
-           -o StrictHostKeyChecking=no \
-           -o UserKnownHostsFile=/dev/null \
-           -N \
-           -L 6443:${OKE_API_PRIVATE_IP}:${OKE_API_PRIVATE_PORT} \
-           ${BASTION_USER}@${BASTION_PUBLIC_IP} &
-
-
-      - name: Create kubeconfig for OKE
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p "$HOME/.kube"
-
-          oci ce cluster create-kubeconfig \
-            --cluster-id "${STG_OKE_CLUSTER_OCID}" \
-            --file "$HOME/.kube/config" \
-            --region ap-singapore-1 \
-            --token-version 2.0.0 \
-            --kube-endpoint PRIVATE_ENDPOINT \
-            --overwrite
-
-          # Update kubeconfig to use localhost (SSH tunnel endpoint)
-          sed -i 's/https:\/\/[^:]\+:6443/https:\/\/127.0.0.1:6443/g' ~/.kube/config
-          cat ~/.kube/config
-
-          export KUBECONFIG="$HOME/.kube/config"
-          kubectl get nodes
-
-      # - name: Apply DevOps-managed Web Cluster LoadBalancer 
-      #   shell: bash
-      #   run: |
-      #     set -euo pipefail
-      #     export KUBECONFIG="$HOME/.kube/config"
-
-      #     cat <<EOF > oke-lb-service.yaml
-      #     apiVersion: v1
-      #     kind: Service
-      #     metadata:
-      #       name: web-lb
-      #       namespace: default
-      #       annotations:
-      #         oci.oraclecloud.com/load-balancer-type: "lb"
-      #         service.beta.kubernetes.io/oci-load-balancer-subnet1: "${LB_SUBNET_OCID}"
-      #         oci.oraclecloud.com/oci-network-security-groups: "${LB_NSG_OCID}"
-      #         service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
-      #         service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-      #         service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-      #         service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
-      #         # service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
-      #         # oci.oraclecloud.com/oci-load-balancer-listener-ssl-config: '{"CipherSuiteName":"oci-tls-12-ssl-cipher-suite-v3", "Protocols":["TLSv1.2"]}'
-      #         # service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
-      #         # service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
-      #     spec:
-      #       loadBalancerIP: "${LB_RESERVED_PUBLIC_IP_OCID}"
-      #       type: LoadBalancer
-      #       selector:
-      #         app: myapp
-      #       ports:
-      #         - name: http
-      #           port: 80
-      #           targetPort: 80
-      #         - name: https
-      #           port: 443
-      #           targetPort: 80
-      #       selector:
-      #         app: cake
-      #     EOF
-
-      #     # cat oke-lb-service.yaml
-      #     # kubectl apply -f oke-lb-service.yaml
-      #     # kubectl get svc web-lb -o wide
-
-      # - name: Deploy TLS secret
-      #   shell: bash
-      #   env:
-      #     TLSCRT: ${{ secrets.TLSCRT }}
-      #     TLSKEY: ${{ secrets.TLSKEY }}
-      #   run: |
-      #     set -euo pipefail
-      #     cat > secret.yaml <<EOF
-      #     apiVersion: v1
-      #     kind: Secret
-      #     metadata:
-      #       name: ssl-certificate-secret
-      #     type: kubernetes.io/tls
-      #     stringData:
-      #       tls.crt: |
-      #     $(printf '%s\n' "$TLSCRT" | sed 's/^/        /')
-      #       tls.key: |
-      #     $(printf '%s\n' "$TLSKEY" | sed 's/^/        /')
-      #     EOF
-
-      #     # kubectl apply -f secret.yaml
-      #     # kubectl get secret ssl-certificate-secret
-
-      - name: Install Helm
-        uses: azure/setup-helm@v5.0.0
-
-      - name: Add Prometheus Helm Repo
-        run: |
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo update
-
-      - name: Install Prometheus Stack
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
-
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-
-          # # Install Blackbox Exporter
-          # if helm status blackbox -n monitoring > /dev/null 2>&1; then
-          #   echo "blackbox Helm release already exists in monitoring, skipping Helm install."
-          # else
-          #   echo "blackbox Helm release not found, installing..."
-          #   helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter \
-          #     --namespace monitoring 
-          # fi
-
-          helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter -f ./observability/blackbox-custom-values.yml \
-            --namespace monitoring
-
-          # # Skip prometheus install if release already exists
-          # if helm status kube-prometheus-stack -n monitoring > /dev/null 2>&1; then
-          #   echo "kube-prometheus-stack Helm release already exists in monitoring, skipping Helm install."
-          # else
-          #   echo "kube-prometheus-stack Helm release not found, installing..."
-          #   helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f values.yaml \
-          #     --namespace monitoring \
-          #     --set prometheus.service.type=ClusterIP 
-          # fi
-
-          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f ./observability/prometheus-custom-values.yml \
-            --namespace monitoring \
-            --set prometheus.service.type=ClusterIP
-
-          ### Check helm list ####
-
-          helm list -n monitoring
-
-      - name: Install Redis-Exporter-Primary Helm Chart
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
-
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-
-          cat <<EOF > stg-redis-primary-values.yml
-          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
-          image:
-            repository: docker.io/oliver006/redis_exporter
-            tag: v1.88.0
-            pullPolicy: IfNotPresent
-
-          serviceMonitor:
-            enabled: true
-            interval: 30s
-            namespace: monitoring
-
-            labels:
-              release: kube-prometheus-stack
-
-          prometheus:
-            monitor:
-              enabled: true
-          EOF
-
-          cat stg-redis-primary-values.yml
-
-
-          # Skip redis-exporter-primary install if release already exists
-          if helm status redis-exporter-primary -n monitoring > /dev/null 2>&1; then
-            echo "redis-exporter-primary Helm release already exists in monitoring, skipping Helm install."
-          else
-            echo "redis-exporter-primary Helm release not found, installing..."
-            helm install redis-exporter-primary prometheus-community/prometheus-redis-exporter \
-              --namespace monitoring \
-              -f stg-redis-primary-values.yml
-          fi
-
-      - name: Install Redis-Exporter-Replica Helm Chart
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
-
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-
-          cat <<EOF > stg-redis-replica-values.yml
-          redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-r.redis.ap-singapore-1.oci.oraclecloud.com:6379
-          image:
-            repository: docker.io/oliver006/redis_exporter
-            tag: v1.88.0
-            pullPolicy: IfNotPresent
-
-          serviceMonitor:
-            enabled: true
-            interval: 30s
-            namespace: monitoring
-
-            labels:
-              release: kube-prometheus-stack
-
-          prometheus:
-            monitor:
-              enabled: true
-          EOF
-
-          cat stg-redis-replica-values.yml
-
-
-          # Skip redis-exporter-replica install if release already exists
-          if helm status redis-exporter-replica -n monitoring > /dev/null 2>&1; then
-            echo "redis-exporter-replica Helm release already exists in monitoring, skipping Helm install."
-          else
-            echo "redis-exporter-replica Helm release not found, installing..."
-            helm install redis-exporter-replica prometheus-community/prometheus-redis-exporter \
-              --namespace monitoring \
-              -f stg-redis-replica-values.yml
-          fi
-
-      - name: Apply DevOps-managed Prometheus Internal LoadBalancer 
-        shell: bash
-        run: |
-          set -euo pipefail
-          export KUBECONFIG="$HOME/.kube/config"
-
-          cat <<EOF > prometheus-lb-service.yaml
-          ---
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: prometheus-lb
-            namespace: monitoring
-            annotations:
-              oci.oraclecloud.com/load-balancer-type: "lb"
-              service.beta.kubernetes.io/oci-load-balancer-internal: "true"
-              service.beta.kubernetes.io/oci-load-balancer-subnet1: "${LB_SUBNET_OCID}"
-              oci.oraclecloud.com/oci-network-security-groups: "${LB_NSG_OCID}"
-              service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
-              service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-              service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-              service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
-          spec:
-            type: LoadBalancer
-            selector:
-              app.kubernetes.io/name: prometheus
-              app.kubernetes.io/instance: kube-prometheus-stack-prometheus
-            ports:
-              - name: http
-                port: 9090
-                targetPort: 9090
-                protocol: TCP
-          EOF
-          cat prometheus-lb-service.yaml
-          kubectl apply -f prometheus-lb-service.yaml
-          kubectl -n monitoring get svc prometheus-lb -o wide
-
-      # - name: Install NGINX Gateway Fabric
-      #   run: |
-      #     export KUBECONFIG="$HOME/.kube/config"
-
-      #     kubectl create namespace nginx-gateway --dry-run=client -o yaml | kubectl apply -f -
-
-      #     # Install Gateway API CRDs (safe re-apply)
-      #     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
-
-      #     # Install Helm chart (skip if exists)
-      #     if helm status ngf -n nginx-gateway > /dev/null 2>&1; then
-      #        echo "NGINX Gateway Fabric already installed, skipping..."
-      #     else
-      #       echo "Installing NGINX Gateway Fabric..."
-      #       helm upgrade --install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
-      #         --namespace nginx-gateway \
-      #         --set service.type=LoadBalancer \
-      #         --set gatewayClass.name=nginx
-      #     fi
-
-      - name: Install NGINX Ingress Controller
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
-
-          kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
-
-          # Add repo if not already added
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
-          helm repo update
-
-          # Skip install if already exists
-          if helm status ingress-nginx-new -n ingress-nginx > /dev/null 2>&1; then
-            echo "ingress-nginx-new already installed, skipping..."
-          else
-            echo "Installing ingress-nginx-new..."
-
-            helm upgrade --install ingress-nginx-new ingress-nginx/ingress-nginx \
-            --namespace ingress-nginx \
-            --set controller.name=custom-nginx \
-            --set controller.ingressClassResource.name=custom-nginx \
-            --set controller.ingressClass=custom-nginx \
-            --set controller.electionID=custom-nginx-leader \
-            --set controller.service.type=LoadBalancer \
-            --set controller.publishService.enabled=true \
-            --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-subnet1"="${LB_SUBNET_OCID}" \
-            --set controller.service.annotations."oci\.oraclecloud\.com/oci-network-security-groups"="${LB_NSG_OCID}" \
-            --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-security-list-management-mode"="None" \
-            --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="lb"
-          fi
-
-      - name: Loki Setup
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
-
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-
-          # Add repo if not already added
-          helm repo add grafana https://grafana.github.io/helm-charts || true
-          helm repo update
-
-          cat <<EOF > loki-custom-values.yaml
-
-          deploymentMode: SingleBinary
-          singleBinary:
-            replicas: 1
-            autoscaling:
-            # -- Enable autoscaling
-              enabled: true
-            service:
-              type: LoadBalancer
-              annotations:
-                oci.oraclecloud.com/load-balancer-type: "lb"
-
-                service.beta.kubernetes.io/oci-load-balancer-internal: "true"
-
-                oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
-
-                service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
-
-                service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
-
-                service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-
-                service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-
-                service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
-              ports:
-                http:
-                  port: 3100
-                  targetPort: http
-          backend:
-            replicas: 0
-          read:
-            replicas: 0
-          write:
-            replicas: 0
-          lokiCanary:
-            enabled: false
-          test:
-            enabled: false
-
-          loki:
-            auth_enabled: false
-            limits_config:
-              allow_structured_metadata: true
-              volume_enabled: true
-              retention_period: 720h   # 30 days
+  #     - name: Start SSH tunnel via bastion
+  #       shell: bash
+  #       env:
+  #         BASTION_SSH_PRIVATE_KEY: ${{ secrets.BASTION_SSH_PRIVATE_KEY }}
+  #         BASTION_USER: ${{ secrets.BASTION_USER }}
+  #         OKE_API_PRIVATE_IP: ${{ env.OKE_API_PRIVATE_IP }}
+  #         OKE_API_PRIVATE_PORT: ${{ env.OKE_API_PRIVATE_PORT }}
+  #         OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
+  #       run: |
+  #        set -euo pipefail
+
+  #        mkdir -p ~/.ssh
+  #        echo "$BASTION_SSH_PRIVATE_KEY" > ~/.ssh/bastion.pem
+  #        chmod 600 ~/.ssh/bastion.pem
+
+  #        ssh -i ~/.ssh/bastion.pem \
+  #          -o StrictHostKeyChecking=no \
+  #          -o UserKnownHostsFile=/dev/null \
+  #          -N \
+  #          -L 6443:${OKE_API_PRIVATE_IP}:${OKE_API_PRIVATE_PORT} \
+  #          ${BASTION_USER}@${BASTION_PUBLIC_IP} &
+
+
+  #     - name: Create kubeconfig for OKE
+  #       shell: bash
+  #       run: |
+  #         set -euo pipefail
+  #         mkdir -p "$HOME/.kube"
+
+  #         oci ce cluster create-kubeconfig \
+  #           --cluster-id "${STG_OKE_CLUSTER_OCID}" \
+  #           --file "$HOME/.kube/config" \
+  #           --region ap-singapore-1 \
+  #           --token-version 2.0.0 \
+  #           --kube-endpoint PRIVATE_ENDPOINT \
+  #           --overwrite
+
+  #         # Update kubeconfig to use localhost (SSH tunnel endpoint)
+  #         sed -i 's/https:\/\/[^:]\+:6443/https:\/\/127.0.0.1:6443/g' ~/.kube/config
+  #         cat ~/.kube/config
+
+  #         export KUBECONFIG="$HOME/.kube/config"
+  #         kubectl get nodes
+
+  #     # - name: Apply DevOps-managed Web Cluster LoadBalancer 
+  #     #   shell: bash
+  #     #   run: |
+  #     #     set -euo pipefail
+  #     #     export KUBECONFIG="$HOME/.kube/config"
+
+  #     #     cat <<EOF > oke-lb-service.yaml
+  #     #     apiVersion: v1
+  #     #     kind: Service
+  #     #     metadata:
+  #     #       name: web-lb
+  #     #       namespace: default
+  #     #       annotations:
+  #     #         oci.oraclecloud.com/load-balancer-type: "lb"
+  #     #         service.beta.kubernetes.io/oci-load-balancer-subnet1: "${LB_SUBNET_OCID}"
+  #     #         oci.oraclecloud.com/oci-network-security-groups: "${LB_NSG_OCID}"
+  #     #         service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+  #     #         service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+  #     #         service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+  #     #         service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
+  #     #         # service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+  #     #         # oci.oraclecloud.com/oci-load-balancer-listener-ssl-config: '{"CipherSuiteName":"oci-tls-12-ssl-cipher-suite-v3", "Protocols":["TLSv1.2"]}'
+  #     #         # service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
+  #     #         # service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
+  #     #     spec:
+  #     #       loadBalancerIP: "${LB_RESERVED_PUBLIC_IP_OCID}"
+  #     #       type: LoadBalancer
+  #     #       selector:
+  #     #         app: myapp
+  #     #       ports:
+  #     #         - name: http
+  #     #           port: 80
+  #     #           targetPort: 80
+  #     #         - name: https
+  #     #           port: 443
+  #     #           targetPort: 80
+  #     #       selector:
+  #     #         app: cake
+  #     #     EOF
+
+  #     #     # cat oke-lb-service.yaml
+  #     #     # kubectl apply -f oke-lb-service.yaml
+  #     #     # kubectl get svc web-lb -o wide
+
+  #     # - name: Deploy TLS secret
+  #     #   shell: bash
+  #     #   env:
+  #     #     TLSCRT: ${{ secrets.TLSCRT }}
+  #     #     TLSKEY: ${{ secrets.TLSKEY }}
+  #     #   run: |
+  #     #     set -euo pipefail
+  #     #     cat > secret.yaml <<EOF
+  #     #     apiVersion: v1
+  #     #     kind: Secret
+  #     #     metadata:
+  #     #       name: ssl-certificate-secret
+  #     #     type: kubernetes.io/tls
+  #     #     stringData:
+  #     #       tls.crt: |
+  #     #     $(printf '%s\n' "$TLSCRT" | sed 's/^/        /')
+  #     #       tls.key: |
+  #     #     $(printf '%s\n' "$TLSKEY" | sed 's/^/        /')
+  #     #     EOF
+
+  #     #     # kubectl apply -f secret.yaml
+  #     #     # kubectl get secret ssl-certificate-secret
+
+  #     - name: Install Helm
+  #       uses: azure/setup-helm@v5.0.0
+
+  #     - name: Add Prometheus Helm Repo
+  #       run: |
+  #         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  #         helm repo update
+
+  #     - name: Install Prometheus Stack
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+  #         # # Install Blackbox Exporter
+  #         # if helm status blackbox -n monitoring > /dev/null 2>&1; then
+  #         #   echo "blackbox Helm release already exists in monitoring, skipping Helm install."
+  #         # else
+  #         #   echo "blackbox Helm release not found, installing..."
+  #         #   helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter \
+  #         #     --namespace monitoring 
+  #         # fi
+
+  #         helm upgrade --install blackbox prometheus-community/prometheus-blackbox-exporter -f ./observability/blackbox-custom-values.yml \
+  #           --namespace monitoring
+
+  #         # # Skip prometheus install if release already exists
+  #         # if helm status kube-prometheus-stack -n monitoring > /dev/null 2>&1; then
+  #         #   echo "kube-prometheus-stack Helm release already exists in monitoring, skipping Helm install."
+  #         # else
+  #         #   echo "kube-prometheus-stack Helm release not found, installing..."
+  #         #   helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f values.yaml \
+  #         #     --namespace monitoring \
+  #         #     --set prometheus.service.type=ClusterIP 
+  #         # fi
+
+  #         helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f ./observability/prometheus-custom-values.yml \
+  #           --namespace monitoring \
+  #           --set prometheus.service.type=ClusterIP
+
+  #         ### Check helm list ####
+
+  #         helm list -n monitoring
+
+  #     - name: Install Redis-Exporter-Primary Helm Chart
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+  #         cat <<EOF > stg-redis-primary-values.yml
+  #         redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-p.redis.ap-singapore-1.oci.oraclecloud.com:6379
+  #         image:
+  #           repository: docker.io/oliver006/redis_exporter
+  #           tag: v1.88.0
+  #           pullPolicy: IfNotPresent
+
+  #         serviceMonitor:
+  #           enabled: true
+  #           interval: 30s
+  #           namespace: monitoring
+
+  #           labels:
+  #             release: kube-prometheus-stack
+
+  #         prometheus:
+  #           monitor:
+  #             enabled: true
+  #         EOF
+
+  #         cat stg-redis-primary-values.yml
+
+
+  #         # Skip redis-exporter-primary install if release already exists
+  #         if helm status redis-exporter-primary -n monitoring > /dev/null 2>&1; then
+  #           echo "redis-exporter-primary Helm release already exists in monitoring, skipping Helm install."
+  #         else
+  #           echo "redis-exporter-primary Helm release not found, installing..."
+  #           helm install redis-exporter-primary prometheus-community/prometheus-redis-exporter \
+  #             --namespace monitoring \
+  #             -f stg-redis-primary-values.yml
+  #         fi
+
+  #     - name: Install Redis-Exporter-Replica Helm Chart
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+  #         cat <<EOF > stg-redis-replica-values.yml
+  #         redisAddress: rediss://aaa6svk5iiaqs2cedo7rg6zhz5e43e6z2rinddhraxpgz4gwip7kvoa-r.redis.ap-singapore-1.oci.oraclecloud.com:6379
+  #         image:
+  #           repository: docker.io/oliver006/redis_exporter
+  #           tag: v1.88.0
+  #           pullPolicy: IfNotPresent
+
+  #         serviceMonitor:
+  #           enabled: true
+  #           interval: 30s
+  #           namespace: monitoring
+
+  #           labels:
+  #             release: kube-prometheus-stack
+
+  #         prometheus:
+  #           monitor:
+  #             enabled: true
+  #         EOF
+
+  #         cat stg-redis-replica-values.yml
+
+
+  #         # Skip redis-exporter-replica install if release already exists
+  #         if helm status redis-exporter-replica -n monitoring > /dev/null 2>&1; then
+  #           echo "redis-exporter-replica Helm release already exists in monitoring, skipping Helm install."
+  #         else
+  #           echo "redis-exporter-replica Helm release not found, installing..."
+  #           helm install redis-exporter-replica prometheus-community/prometheus-redis-exporter \
+  #             --namespace monitoring \
+  #             -f stg-redis-replica-values.yml
+  #         fi
+
+  #     - name: Apply DevOps-managed Prometheus Internal LoadBalancer 
+  #       shell: bash
+  #       run: |
+  #         set -euo pipefail
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         cat <<EOF > prometheus-lb-service.yaml
+  #         ---
+  #         apiVersion: v1
+  #         kind: Service
+  #         metadata:
+  #           name: prometheus-lb
+  #           namespace: monitoring
+  #           annotations:
+  #             oci.oraclecloud.com/load-balancer-type: "lb"
+  #             service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+  #             service.beta.kubernetes.io/oci-load-balancer-subnet1: "${LB_SUBNET_OCID}"
+  #             oci.oraclecloud.com/oci-network-security-groups: "${LB_NSG_OCID}"
+  #             service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+  #             service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+  #             service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+  #             service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
+  #         spec:
+  #           type: LoadBalancer
+  #           selector:
+  #             app.kubernetes.io/name: prometheus
+  #             app.kubernetes.io/instance: kube-prometheus-stack-prometheus
+  #           ports:
+  #             - name: http
+  #               port: 9090
+  #               targetPort: 9090
+  #               protocol: TCP
+  #         EOF
+  #         cat prometheus-lb-service.yaml
+  #         kubectl apply -f prometheus-lb-service.yaml
+  #         kubectl -n monitoring get svc prometheus-lb -o wide
+
+  #     # - name: Install NGINX Gateway Fabric
+  #     #   run: |
+  #     #     export KUBECONFIG="$HOME/.kube/config"
+
+  #     #     kubectl create namespace nginx-gateway --dry-run=client -o yaml | kubectl apply -f -
+
+  #     #     # Install Gateway API CRDs (safe re-apply)
+  #     #     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+
+  #     #     # Install Helm chart (skip if exists)
+  #     #     if helm status ngf -n nginx-gateway > /dev/null 2>&1; then
+  #     #        echo "NGINX Gateway Fabric already installed, skipping..."
+  #     #     else
+  #     #       echo "Installing NGINX Gateway Fabric..."
+  #     #       helm upgrade --install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
+  #     #         --namespace nginx-gateway \
+  #     #         --set service.type=LoadBalancer \
+  #     #         --set gatewayClass.name=nginx
+  #     #     fi
+
+  #     - name: Install NGINX Ingress Controller
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         kubectl create namespace ingress-nginx --dry-run=client -o yaml | kubectl apply -f -
+
+  #         # Add repo if not already added
+  #         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx || true
+  #         helm repo update
+
+  #         # Skip install if already exists
+  #         if helm status ingress-nginx-new -n ingress-nginx > /dev/null 2>&1; then
+  #           echo "ingress-nginx-new already installed, skipping..."
+  #         else
+  #           echo "Installing ingress-nginx-new..."
+
+  #           helm upgrade --install ingress-nginx-new ingress-nginx/ingress-nginx \
+  #           --namespace ingress-nginx \
+  #           --set controller.name=custom-nginx \
+  #           --set controller.ingressClassResource.name=custom-nginx \
+  #           --set controller.ingressClass=custom-nginx \
+  #           --set controller.electionID=custom-nginx-leader \
+  #           --set controller.service.type=LoadBalancer \
+  #           --set controller.publishService.enabled=true \
+  #           --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-subnet1"="${LB_SUBNET_OCID}" \
+  #           --set controller.service.annotations."oci\.oraclecloud\.com/oci-network-security-groups"="${LB_NSG_OCID}" \
+  #           --set controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-security-list-management-mode"="None" \
+  #           --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="lb"
+  #         fi
+
+  #     - name: Loki Setup
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
+
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+  #         # Add repo if not already added
+  #         helm repo add grafana https://grafana.github.io/helm-charts || true
+  #         helm repo update
+
+  #         cat <<EOF > loki-custom-values.yaml
+
+  #         deploymentMode: SingleBinary
+  #         singleBinary:
+  #           replicas: 1
+  #           autoscaling:
+  #           # -- Enable autoscaling
+  #             enabled: true
+  #           service:
+  #             type: LoadBalancer
+  #             annotations:
+  #               oci.oraclecloud.com/load-balancer-type: "lb"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+
+  #               oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+
+  #               service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
+  #             ports:
+  #               http:
+  #                 port: 3100
+  #                 targetPort: http
+  #         backend:
+  #           replicas: 0
+  #         read:
+  #           replicas: 0
+  #         write:
+  #           replicas: 0
+  #         lokiCanary:
+  #           enabled: false
+  #         test:
+  #           enabled: false
+
+  #         loki:
+  #           auth_enabled: false
+  #           limits_config:
+  #             allow_structured_metadata: true
+  #             volume_enabled: true
+  #             retention_period: 720h   # 30 days
           
-            compactor:
-              retention_enabled: true
-              working_directory: /var/loki/compactor
-              delete_request_store: s3
+  #           compactor:
+  #             retention_enabled: true
+  #             working_directory: /var/loki/compactor
+  #             delete_request_store: s3
 
-            distributor:
-              otlp_config:
-                default_resource_attributes_as_index_labels:
-                  - service.name
-                  - service.namespace
-                  - service.instance.id
-                  - k8s.namespace.name
-                  - k8s.pod.name
-                  - k8s.container.name
+  #           distributor:
+  #             otlp_config:
+  #               default_resource_attributes_as_index_labels:
+  #                 - service.name
+  #                 - service.namespace
+  #                 - service.instance.id
+  #                 - k8s.namespace.name
+  #                 - k8s.pod.name
+  #                 - k8s.container.name
 
-            commonConfig:
-              replication_factor: 1
+  #           commonConfig:
+  #             replication_factor: 1
 
-            schemaConfig:
-              configs:
-                - from: "2024-01-01"
-                  store: tsdb
-                  object_store: s3
-                  schema: v13
-                  index:
-                    prefix: index_
-                    period: 24h
+  #           schemaConfig:
+  #             configs:
+  #               - from: "2024-01-01"
+  #                 store: tsdb
+  #                 object_store: s3
+  #                 schema: v13
+  #                 index:
+  #                   prefix: index_
+  #                   period: 24h
 
-            storage:
+  #           storage:
             
-              type: s3
-              # Use Thanos object storage client
-              use_thanos_objstore: true
-              bucketNames:
-                chunks: stg_loki_chunks_bucket
-                ruler: stg_loki_ruler_bucket
-                admin: stg_loki_admin_bucket
+  #             type: s3
+  #             # Use Thanos object storage client
+  #             use_thanos_objstore: true
+  #             bucketNames:
+  #               chunks: stg_loki_chunks_bucket
+  #               ruler: stg_loki_ruler_bucket
+  #               admin: stg_loki_admin_bucket
 
-              object_store:
-                type: s3
+  #             object_store:
+  #               type: s3
 
-                s3:
-                  endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
-                  region: ap-singapore-1
-                  access_key_id: ${{ secrets.OCI_ACCESSKEYID }}
-                  secret_access_key: ${{ secrets.OCI_SECRETACCESSKEY }}
-                  insecure: false
+  #               s3:
+  #                 endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+  #                 region: ap-singapore-1
+  #                 access_key_id: ${{ secrets.OCI_ACCESSKEYID }}
+  #                 secret_access_key: ${{ secrets.OCI_SECRETACCESSKEY }}
+  #                 insecure: false
               
-          gateway:
-            enabled: false
-          chunksCache:
-            enabled: false
-          resultsCache:
-            enabled: false
+  #         gateway:
+  #           enabled: false
+  #         chunksCache:
+  #           enabled: false
+  #         resultsCache:
+  #           enabled: false
           
-          EOF
+  #         EOF
 
-          cat loki-custom-values.yaml
-          helm upgrade --install loki grafana/loki \
-          --namespace monitoring -f loki-custom-values.yaml
+  #         cat loki-custom-values.yaml
+  #         helm upgrade --install loki grafana/loki \
+  #         --namespace monitoring -f loki-custom-values.yaml
 
-          # # Skip install if already exists
-          # if helm status loki -n monitoring > /dev/null 2>&1; then
-          #   echo "loki already installed, skipping..."
-          # else
-          #   echo "Installing loki..."
+  #         # # Skip install if already exists
+  #         # if helm status loki -n monitoring > /dev/null 2>&1; then
+  #         #   echo "loki already installed, skipping..."
+  #         # else
+  #         #   echo "Installing loki..."
 
-          #   helm upgrade --install loki grafana/loki \
-          #   --namespace monitoring -f ./observability/loki-custom-values.yml
-          # fi
+  #         #   helm upgrade --install loki grafana/loki \
+  #         #   --namespace monitoring -f ./observability/loki-custom-values.yml
+  #         # fi
 
-      - name: Tempo Setup
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
+  #     - name: Tempo Setup
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
 
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-          # Add repo if not already added
-          helm repo add grafana https://grafana.github.io/helm-charts || true
-          helm repo update
+  #         # Add repo if not already added
+  #         helm repo add grafana https://grafana.github.io/helm-charts || true
+  #         helm repo update
 
-          cat <<EOF > tempo-custom-values.yaml
-          tempo:
-            storage:
-              trace:
-                backend: s3
+  #         cat <<EOF > tempo-custom-values.yaml
+  #         tempo:
+  #           storage:
+  #             trace:
+  #               backend: s3
 
-                s3:
-                  bucket: stg_tempo_bucket
+  #               s3:
+  #                 bucket: stg_tempo_bucket
 
-                  endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
+  #                 endpoint: sdu99mdvjlue.compat.objectstorage.ap-singapore-1.oci.customer-oci.com
 
-                  region: ap-singapore-1
+  #                 region: ap-singapore-1
 
-                  access_key: ${{ secrets.OCI_ACCESSKEYID }}
+  #                 access_key: ${{ secrets.OCI_ACCESSKEYID }}
 
-                  secret_key: ${{ secrets.OCI_SECRETACCESSKEY }}
+  #                 secret_key: ${{ secrets.OCI_SECRETACCESSKEY }}
 
-                  insecure: false
+  #                 insecure: false
 
-            retention: 720h
+  #           retention: 720h
 
-          service:
-            type: LoadBalancer
-            annotations:
-              oci.oraclecloud.com/load-balancer-type: "lb"
+  #         service:
+  #           type: LoadBalancer
+  #           annotations:
+  #             oci.oraclecloud.com/load-balancer-type: "lb"
 
-              service.beta.kubernetes.io/oci-load-balancer-internal: "true"
+  #             service.beta.kubernetes.io/oci-load-balancer-internal: "true"
 
-              oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
+  #             oci.oraclecloud.com/oci-network-security-groups: "ocid1.networksecuritygroup.oc1.ap-singapore-1.aaaaaaaazp36gnkorhr5kmhithphvsaw7ca75yw77dzrzag7m6zj3iteytea"
 
-              service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
+  #             service.beta.kubernetes.io/oci-load-balancer-subnet1: "ocid1.subnet.oc1.ap-singapore-1.aaaaaaaa6ofzms5vzszg52x3zvubdogd463qqneeg7om3bdys7qqbype3qxa"
 
-              service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+  #             service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
 
-              service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+  #             service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
 
-              service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+  #             service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
 
-              service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
-          EOF
+  #             service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "1000"
+  #         EOF
 
-          helm upgrade --install tempo grafana/tempo \
-          --namespace monitoring -f tempo-custom-values.yaml
+  #         helm upgrade --install tempo grafana/tempo \
+  #         --namespace monitoring -f tempo-custom-values.yaml
           
 
-          # # Skip install if already exists
-          # if helm status tempo -n monitoring > /dev/null 2>&1; then
-          #   echo "tempo already installed, skipping..."
-          # else
-          #   echo "Installing tempo..."
+  #         # # Skip install if already exists
+  #         # if helm status tempo -n monitoring > /dev/null 2>&1; then
+  #         #   echo "tempo already installed, skipping..."
+  #         # else
+  #         #   echo "Installing tempo..."
 
-          #   helm upgrade --install tempo grafana/tempo \
-          #   --namespace monitoring -f ./observability/tempo-custom-values.yml
-          # fi
+  #         #   helm upgrade --install tempo grafana/tempo \
+  #         #   --namespace monitoring -f ./observability/tempo-custom-values.yml
+  #         # fi
 
-      - name: OTEL Setup
-        run: |
-          export KUBECONFIG="$HOME/.kube/config"
+  #     - name: OTEL Setup
+  #       run: |
+  #         export KUBECONFIG="$HOME/.kube/config"
 
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+  #         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-          # Add repo if not already added
-          helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts || true
-          helm repo update
+  #         # Add repo if not already added
+  #         helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts || true
+  #         helm repo update
 
-          helm upgrade --install otel open-telemetry/opentelemetry-collector \
-          --namespace monitoring -f ./observability/otel-custom-values.yml
+  #         helm upgrade --install otel open-telemetry/opentelemetry-collector \
+  #         --namespace monitoring -f ./observability/otel-custom-values.yml
 
-          # # Skip install if already exists
-          # if helm status otel -n monitoring > /dev/null 2>&1; then
-          #   echo "otel already installed, skipping..."
-          # else
-          #   echo "Installing otel..."
+  #         # # Skip install if already exists
+  #         # if helm status otel -n monitoring > /dev/null 2>&1; then
+  #         #   echo "otel already installed, skipping..."
+  #         # else
+  #         #   echo "Installing otel..."
 
-          #   helm upgrade --install otel open-telemetry/opentelemetry-collector \
-          #   --namespace monitoring -f ./observability/otel-custom-values.yml
-          # fi
+  #         #   helm upgrade --install otel open-telemetry/opentelemetry-collector \
+  #         #   --namespace monitoring -f ./observability/otel-custom-values.yml
+  #         # fi
 
 
 
