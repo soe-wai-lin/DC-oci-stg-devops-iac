@@ -125,92 +125,92 @@ locals {
   )
 }
 
-# #########################################
-# # Resource: system node pool
-# # Intended for platform/system workloads.
-# #########################################
-# resource "oci_containerengine_node_pool" "airs_system" {
-#   provider = oci.resource
-#   cluster_id         = oci_containerengine_cluster.stg_oke.id
-#   compartment_id     = oci_identity_compartment.app_compartment.id
-#   name               = var.airs_system_node_pool_name
-#   kubernetes_version = var.airs_kubernetes_version
+#########################################
+# Resource: system node pool
+# Intended for platform/system workloads.
+#########################################
+resource "oci_containerengine_node_pool" "airs_system" {
+  provider = oci.resource
+  cluster_id         = oci_containerengine_cluster.stg_oke.id
+  compartment_id     = oci_identity_compartment.app_compartment.id
+  name               = var.airs_system_node_pool_name
+  kubernetes_version = var.airs_kubernetes_version
 
-#   node_shape = var.airs_system_node_shape
+  node_shape = var.airs_system_node_shape
 
-#   freeform_tags = merge(var.freeform_tags, {
-#     "oke-nodepool-role" = "system"
-#   })
-#   defined_tags = var.defined_tags
+  freeform_tags = merge(var.freeform_tags, {
+    "oke-nodepool-role" = "system"
+  })
+  defined_tags = var.defined_tags
 
-#   initial_node_labels {
-#     key = "name"
-#     value = "abdigital-stg-pool-system"
-#   }
-#   initial_node_labels {
-#     key = "nodepool-role"
-#     value = "system"
-#   }
-
-
-#   # Rolling replacement / safer maintenance behavior.
-#   node_eviction_node_pool_settings {
-#     eviction_grace_duration              = var.airs_node_eviction_grace_duration
-#     is_force_action_after_grace_duration = var.airs_node_force_action_after_grace_duration
-#     is_force_delete_after_grace_duration = var.airs_node_force_delete_after_grace_duration
-#   }
-
-#   node_pool_cycling_details {
-#     is_node_cycling_enabled = var.airs_node_cycling_enabled
-#     maximum_surge           = var.airs_node_cycling_maximum_surge
-#     maximum_unavailable     = var.airs_node_cycling_maximum_unavailable
-#   }
-
-#   node_source_details {
-#     # image_id    = local.airs_system_node_image_id
-#     image_id    = var.airs_system_node_image_id
-#     source_type = "IMAGE"
-#   }
-
-#   node_shape_config {
-#     memory_in_gbs = var.airs_system_memory_in_gbs
-#     ocpus         = var.airs_system_ocpus
-#   }
-
-#   # Node placement and network configuration.
-#   node_config_details {
-#     size = var.airs_system_node_count
-
-#     placement_configs {
-#       availability_domain = var.airs_system_availability_domain
-#       subnet_id           = oci_core_subnet.airs_micro_oke_worker_sub.id
-#     }
-
-#     nsg_ids = [oci_core_network_security_group.nsg_prod_airs.id]
-
-#     node_pool_pod_network_option_details {
-#       cni_type          = var.airs_cni_type
-#       max_pods_per_node = var.airs_system_max_pods_per_node
-#       pod_subnet_ids    = [oci_core_subnet.airs_micro_oke_pod_sub.id]
-#       pod_nsg_ids       = [oci_core_network_security_group.nsg_prod_airs_pod.id]
-#     }
-#   }
+  initial_node_labels {
+    key = "name"
+    value = "abdigital-stg-pool-system"
+  }
+  initial_node_labels {
+    key = "nodepool-role"
+    value = "system"
+  }
 
 
-#   ssh_public_key = var.stg_oke_ssh_public_key
+  # Rolling replacement / safer maintenance behavior.
+  node_eviction_node_pool_settings {
+    eviction_grace_duration              = var.airs_node_eviction_grace_duration
+    is_force_action_after_grace_duration = var.airs_node_force_action_after_grace_duration
+    is_force_delete_after_grace_duration = var.airs_node_force_delete_after_grace_duration
+  }
 
-#   lifecycle {
-#     precondition {
-#       condition     = contains(data.oci_containerengine_node_pool_option.airs_all_options.shapes, var.airs_system_node_shape)
-#       error_message = "The requested system_node_shape is not listed as a supported OKE node-pool shape in this tenancy/region."
-#     }
+  node_pool_cycling_details {
+    is_node_cycling_enabled = var.airs_node_cycling_enabled
+    maximum_surge           = var.airs_node_cycling_maximum_surge
+    maximum_unavailable     = var.airs_node_cycling_maximum_unavailable
+  }
 
-#     precondition {
-#       condition     = local.airs_system_node_image_id != null
-#       error_message = "No compatible OKE image was found in node-pool-options for the requested Kubernetes version."
-#     }
-#   }
-# }
+  node_source_details {
+    # image_id    = local.airs_system_node_image_id
+    image_id    = var.airs_system_node_image_id
+    source_type = "IMAGE"
+  }
+
+  node_shape_config {
+    memory_in_gbs = var.airs_system_memory_in_gbs
+    ocpus         = var.airs_system_ocpus
+  }
+
+  # Node placement and network configuration.
+  node_config_details {
+    size = var.airs_system_node_count
+
+    placement_configs {
+      availability_domain = var.airs_system_availability_domain
+      subnet_id           = oci_core_subnet.airs_micro_oke_worker_sub.id
+    }
+
+    nsg_ids = [oci_core_network_security_group.nsg_prod_airs.id]
+
+    node_pool_pod_network_option_details {
+      cni_type          = var.airs_cni_type
+      max_pods_per_node = var.airs_system_max_pods_per_node
+      pod_subnet_ids    = [oci_core_subnet.airs_micro_oke_pod_sub.id]
+      pod_nsg_ids       = [oci_core_network_security_group.nsg_prod_airs_pod.id]
+    }
+  }
+
+
+  ssh_public_key = var.stg_oke_ssh_public_key
+
+  lifecycle {
+    precondition {
+      condition     = contains(data.oci_containerengine_node_pool_option.airs_all_options.shapes, var.airs_system_node_shape)
+      error_message = "The requested system_node_shape is not listed as a supported OKE node-pool shape in this tenancy/region."
+    }
+
+    precondition {
+      condition     = local.airs_system_node_image_id != null
+      error_message = "No compatible OKE image was found in node-pool-options for the requested Kubernetes version."
+    }
+  }
+}
 
 #########################################
 # Resource: worker node pool
