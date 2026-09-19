@@ -891,7 +891,7 @@ variable "airs_worker_node_pool_name" {
 variable "airs_worker_node_count" {
   description = "Desired number of nodes in the worker node pool."
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "airs_worker_availability_domain" {

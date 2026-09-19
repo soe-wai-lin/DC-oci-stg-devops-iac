@@ -45,15 +45,15 @@ resource "oci_objectstorage_bucket" "dr_protection_bucket" {
 ## IAM Policy for Authentik Bucket ##
 #####################################
 
-resource "oci_identity_policy" "authentik_bucket_policy" {
-  name           = "authentik_bucket_policy"
+resource "oci_identity_policy" "dr_protection_bucket_policy" {
+  name           = "dr_protection_bucket_policy"
   compartment_id = var.tenancy_ocid
   provider = oci.home
-  description    = "Policy to allow access to the Authentik Object Storage bucket."
+  description    = "Policy to allow access to the DR Protection Group Object Storage bucket."
 
   statements = [
-    "Allow group ABDigital to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'",
-    "Allow group ABDigital-Developer to manage object-family in compartment id ${oci_identity_compartment.data_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.authentik_bucket.name}'"
+    "Allow group ABDigital to manage object-family in compartment id ${oci_identity_compartment.mgmt_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.dr_protection_bucket.name}'",
+    "Allow group ABDigital-Developer to manage object-family in compartment id ${oci_identity_compartment.mgmt_compartment.id} where target.bucket.name='${oci_objectstorage_bucket.dr_protection_bucket.name}'"
   ]
 }
 
