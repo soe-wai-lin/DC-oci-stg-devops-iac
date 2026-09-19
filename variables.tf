@@ -4,7 +4,7 @@
 
 
 variable "home_region" {
-  default = "ap-sydney-1"
+  default = "ap-singapore-1"
 }
 
 variable "resource_region" {
@@ -17,12 +17,12 @@ variable "resource_region" {
 
 
 variable "compartment_id" {
-  default     = "ocid1.compartment.oc1..aaaaaaaaunnn7vontolwxh5ckprtwb3c5sqohfjgo2pk2wpw6bwrrqupo7ga"
+  default     = "ocid1.compartment.oc1..aaaaaaaarfcxj755zm6namwjijmg426pve3qlqrtfls6egmutvemkm2vvloa"
   description = "staging compartment, this compartment id will be used to create subcompartment like app, data, mgmt, network"
 }
 
 variable "vcn_display_name" {
-  default = "stg"
+  default = "DC-TW-VCN"
   type    = string
 }
 
@@ -140,19 +140,19 @@ variable "nsg_airs_pod" {
 #   default = "nsg-stg-cms-pod"
 # }
 
-variable "alert_email_1" {
-  default = "wailin.s@trinitywizards.com"
-}
+# variable "alert_email_1" {
+#   default = "wailin.s@trinitywizards.com"
+# }
 
-variable "alert_email_2" {
-  default = "v.wong@trinitywizards.com"
-}
+# variable "alert_email_2" {
+#   default = "v.wong@trinitywizards.com"
+# }
 
 
 variable "tenancy_ocid" {
   description = "Tenancy OCID (needed to query Availability Domains)."
   type        = string
-  default     = "ocid1.tenancy.oc1..aaaaaaaaypiggoy7fnooykgwthklvkettgl7arlgyab5lvj67xykehcnipxq"
+  default     = "ocid1.tenancy.oc1..aaaaaaaatqwblz7zyqmzal6265vaijaqiwfmqejptj5zh7dhnornymkvlina"
 }
 
 # variable "ssh_public_key" {
@@ -645,7 +645,7 @@ variable "bastion_ad_index" {
 variable "bastion_ssh_public_keys" {
   description = "One or more OpenSSH public keys that can log in to the bastion host. Separate keys with newlines."
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDjNRHetQJYNR93uEaiNe9j+DXfT3ssapYp/npJ74AqDxbTzt2aky8ofRMU1OFgrZQglCywL0T1qY1x2oYFVp3BLJUOKMaWP28jQlX2L9KDqD8kziKgq0ydVW7RkevApAGeVflD6jv2LF34+S9zlgjRezq+UzE1zAaFPWdZRaHOfbMhb86uxBpFU+I2SmRni9qYpzQAMcoTmGA0crVN2mhdP/9ZxRr+BllVCXeiSnmoXHlaNujUY6qGzzjew29W7bNi3OLjtiCVy6O+H6+HQP4Xhn83CYVZZTdHjpm28fu1yz2XmnhmEs8XG9fsU8vR/hv3u0psmB1rIS2EAhA0+VmukNSkP2yVIBcwhYgS5jsZEoTeKUXF+eld+mV88vpRFfEJ3Koog/Vvc47mfJ5l6F0yiPIDGWS2Sv/MhzRVxIaDpWHjgOxQEysq6sQ7hwUrO1uDkLvUXFx7Ru97Eaz6RMhPLd1yHBbq4inRTXLEfCYaPdGbReU9CvAXlruycfw556E= wailin_s@a6b3bc12eb0b"
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMMNtwjmuKJ2sZgOm6hFTD0Vu2LVyR9ac72w5uyiRe8U swl@swl"
 }
 
 variable "bastion_image_operating_system" {
@@ -709,7 +709,7 @@ variable "gfhost_ad_index" {
 variable "gfhost_ssh_public_keys" {
   description = "One or more OpenSSH public keys that can log in to the Grafana host. Separate keys with newlines."
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDjNRHetQJYNR93uEaiNe9j+DXfT3ssapYp/npJ74AqDxbTzt2aky8ofRMU1OFgrZQglCywL0T1qY1x2oYFVp3BLJUOKMaWP28jQlX2L9KDqD8kziKgq0ydVW7RkevApAGeVflD6jv2LF34+S9zlgjRezq+UzE1zAaFPWdZRaHOfbMhb86uxBpFU+I2SmRni9qYpzQAMcoTmGA0crVN2mhdP/9ZxRr+BllVCXeiSnmoXHlaNujUY6qGzzjew29W7bNi3OLjtiCVy6O+H6+HQP4Xhn83CYVZZTdHjpm28fu1yz2XmnhmEs8XG9fsU8vR/hv3u0psmB1rIS2EAhA0+VmukNSkP2yVIBcwhYgS5jsZEoTeKUXF+eld+mV88vpRFfEJ3Koog/Vvc47mfJ5l6F0yiPIDGWS2Sv/MhzRVxIaDpWHjgOxQEysq6sQ7hwUrO1uDkLvUXFx7Ru97Eaz6RMhPLd1yHBbq4inRTXLEfCYaPdGbReU9CvAXlruycfw556E= wailin_s@a6b3bc12eb0b"
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMMNtwjmuKJ2sZgOm6hFTD0Vu2LVyR9ac72w5uyiRe8U swl@swl"
 }
 
 variable "gfhost_image_operating_system" {
@@ -812,7 +812,7 @@ variable "airs_cluster_name" {
 variable "airs_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.1"
 }
 
 variable "airs_cluster_type" {

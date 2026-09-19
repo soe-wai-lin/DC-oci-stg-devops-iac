@@ -1,4 +1,4 @@
-name: OCI Resource Manager Apply
+name: DC Resource Manager Apply
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   plan:
-    name: STG OCI Infra Resource Manager Plan
+    name: DC OCI Infra Resource Manager Plan
     runs-on: ubuntu-latest
     ## We can use Job level output to carry different job level, but if this output include sensitive datas like secrets,
     ## Cannot carry this output to different job. That's why in this case, use upload "plan_job_id" in Plan Job , and 
@@ -54,6 +54,7 @@ jobs:
           OCI_REGION: ${{ secrets.OCI_REGION }}
           OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
           OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+          OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
         run: |
           mkdir -p ~/.oci
           chmod 700 ~/.oci
@@ -68,6 +69,7 @@ jobs:
           region=${OCI_REGION}
           fingerprint=${OCI_FINGERPRINT}
           key_file=${HOME}/.oci/oci_api_key.pem
+          pass_phrase=${OCI_PRIVATE_KEY_PASSPHRASE}
           EOF
           cat ~/.oci/config
 
@@ -161,7 +163,7 @@ jobs:
 
 
   apply:
-    name: STG Infra OCI Resource Manager Apply
+    name: DC Infra OCI Resource Manager Apply
     runs-on: ubuntu-latest
 
 # ✅ Only run apply when manually triggered AND input = true
@@ -189,6 +191,7 @@ jobs:
           OCI_REGION: ${{ secrets.OCI_REGION }}
           OCI_FINGERPRINT: ${{ secrets.OCI_FINGERPRINT }}
           OCI_PRIVATE_KEY: ${{ secrets.OCI_PRIVATE_KEY }}
+          OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
         run: |
           mkdir -p ~/.oci
           chmod 700 ~/.oci
@@ -203,6 +206,7 @@ jobs:
           region=${OCI_REGION}
           fingerprint=${OCI_FINGERPRINT}
           key_file=${HOME}/.oci/oci_api_key.pem
+          pass_phrase=${OCI_PRIVATE_KEY_PASSPHRASE}
           EOF
 
           chmod 600 ~/.oci/config
@@ -1189,6 +1193,7 @@ jobs:
           BASTION_USER: ${{ secrets.BASTION_USER }}
           OKE_API_PRIVATE_IP: ${{ env.OKE_API_PRIVATE_IP }}
           OKE_API_PRIVATE_PORT: ${{ env.OKE_API_PRIVATE_PORT }}
+          OCI_PRIVATE_KEY_PASSPHRASE: ${{ secrets.OCI_PRIVATE_KEY_PASSPHRASE }}
         run: |
          set -euo pipefail
 
