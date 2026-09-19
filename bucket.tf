@@ -23,20 +23,20 @@ data "oci_objectstorage_bucket" "bucket" {
 }
 
 ########################
-## Authentik Bucket  ###
+## DR Protection Group Bucket  ###
 ########################
 
-resource "oci_objectstorage_bucket" "authentik_bucket" {
-  compartment_id = oci_identity_compartment.data_compartment.id
+resource "oci_objectstorage_bucket" "dr_protection_bucket" {
+  compartment_id = oci_identity_compartment.mgmt_compartment.id
   namespace      = data.oci_objectstorage_namespace.ns.namespace
-  name           = var.authentik_bucket_name
+  name           = var.dr_protection_bucket_name
 
-  access_type           = var.authentik_access_type
-  storage_tier          = var.authentik_storage_tier
-  auto_tiering          = var.authentik_auto_tiering
-  versioning            = var.authentik_versioning
-  object_events_enabled = var.authentik_object_events_enabled
-  kms_key_id            = var.authentik_kms_key_id
+  access_type           = var.dr_protection_access_type
+  storage_tier          = var.dr_protection_storage_tier
+  auto_tiering          = var.dr_protection_auto_tiering
+  versioning            = var.dr_protection_versioning
+  object_events_enabled = var.dr_protection_object_events_enabled
+  kms_key_id            = var.dr_protection_kms_key_id
   metadata              = var.metadata
   freeform_tags         = var.freeform_tags
 }

@@ -318,63 +318,63 @@ variable "metadata" {
   default     = {}
 }
 
-variable "authentik_bucket_name" {
-  description = "Name of the Authentik Object Storage bucket."
+variable "dr_protection_bucket_name" {
+  description = "Name of the DR Protection Group Object Storage bucket."
   type        = string
-  default     = "stg_authentik_bucket"
+  default     = "stg_dr_protection_bucket"
 }
 
-variable "authentik_access_type" {
-  description = "Authentik bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
+variable "dr_protection_access_type" {
+  description = "DR Protection Group bucket public access type: NoPublicAccess, ObjectRead, or ObjectReadWithoutList."
   type        = string
   default     = "NoPublicAccess"
 
   validation {
-    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.authentik_access_type)
-    error_message = "authentik_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
+    condition     = contains(["NoPublicAccess", "ObjectRead", "ObjectReadWithoutList"], var.dr_protection_access_type)
+    error_message = "dr_protection_access_type must be one of: NoPublicAccess, ObjectRead, ObjectReadWithoutList."
   }
 }
 
-variable "authentik_storage_tier" {
-  description = "Authentik bucket storage tier: Standard or Archive."
+variable "dr_protection_storage_tier" {
+  description = "DR Protection Group bucket storage tier: Standard or Archive."
   type        = string
   default     = "Standard"
 
   validation {
-    condition     = contains(["Standard", "Archive"], var.authentik_storage_tier)
-    error_message = "authentik_storage_tier must be either Standard or Archive."
+    condition     = contains(["Standard", "Archive"], var.dr_protection_storage_tier)
+    error_message = "dr_protection_storage_tier must be either Standard or Archive."
   }
 }
 
-variable "authentik_auto_tiering" {
-  description = "Authentik bucket auto tiering setting: Disabled or InfrequentAccess."
+variable "dr_protection_auto_tiering" {
+  description = "DR Protection Group bucket auto tiering setting: Disabled or InfrequentAccess."
   type        = string
   default     = "Disabled"
 
   validation {
-    condition     = contains(["Disabled", "InfrequentAccess"], var.authentik_auto_tiering)
-    error_message = "authentik_auto_tiering must be either Disabled or InfrequentAccess."
+    condition     = contains(["Disabled", "InfrequentAccess"], var.dr_protection_auto_tiering)
+    error_message = "dr_protection_auto_tiering must be either Disabled or InfrequentAccess."
   }
 }
 
-variable "authentik_versioning" {
-  description = "Enable object versioning on the Authentik bucket: Enabled or Disabled."
+variable "dr_protection_versioning" {
+  description = "Enable object versioning on the DR Protection Group bucket: Enabled or Disabled."
   type        = string
   default     = "Disabled"
 
   validation {
-    condition     = contains(["Enabled", "Disabled"], var.authentik_versioning)
-    error_message = "authentik_versioning must be either Enabled or Disabled."
+    condition     = contains(["Enabled", "Disabled"], var.dr_protection_versioning)
+    error_message = "dr_protection_versioning must be either Enabled or Disabled."
   }
 }
 
-variable "authentik_object_events_enabled" {
-  description = "Whether Object Storage events are enabled for the Authentik bucket."
+variable "dr_protection_object_events_enabled" {
+  description = "Whether Object Storage events are enabled for the DR Protection Group bucket."
   type        = bool
   default     = false
 }
 
-variable "authentik_kms_key_id" {
+variable "dr_protection_kms_key_id" {
   description = "Optional KMS key OCID for Authentik bucket encryption."
   type        = string
   default     = null
