@@ -5,7 +5,7 @@
 resource "oci_containerengine_cluster" "stg_oke" {
   provider = oci.resource
   compartment_id     = oci_identity_compartment.app_compartment.id
-  name               = var.airs_cluster_name
+  name               = "${var.vcn_display_name}-cluster"
   kubernetes_version = var.airs_kubernetes_version
   vcn_id             = oci_core_vcn.terra_vcn.id
   type               = var.airs_cluster_type
@@ -167,8 +167,8 @@ resource "oci_containerengine_node_pool" "airs_system" {
   }
 
   node_source_details {
-    # image_id    = local.airs_system_node_image_id
-    image_id    = var.airs_system_node_image_id
+    image_id    = local.airs_system_node_image_id
+    # image_id    = var.airs_system_node_image_id
     source_type = "IMAGE"
   }
 
@@ -249,8 +249,8 @@ resource "oci_containerengine_node_pool" "airs_worker" {
   }
 
   node_source_details {
-    # image_id    = local.airs_worker_node_image_id
-    image_id    = var.airs_worker_node_image_id
+    image_id    = local.airs_worker_node_image_id
+    # image_id    = var.airs_worker_node_image_id
     source_type = "IMAGE"
   }
 
