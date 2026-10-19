@@ -883,7 +883,7 @@ variable "airs_system_availability_domain" {
 }
 
 variable "airs_system_node_image_id" {
-  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaah4effqc3u5edio4huibyous4aiyswruwvmi3h4uanhbnkcy2ll3a"
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatjvvawkzj5vgfwziypbxdv6xxp5zbc7hyf2zgsfzvyzqeow2h2ya"
 }
 
 #########################
@@ -891,7 +891,7 @@ variable "airs_system_node_image_id" {
 #########################
 
 variable "airs_worker_node_image_id" {
-  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaah4effqc3u5edio4huibyous4aiyswruwvmi3h4uanhbnkcy2ll3a"
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatjvvawkzj5vgfwziypbxdv6xxp5zbc7hyf2zgsfzvyzqeow2h2ya"
 }
 
 variable "airs_worker_node_pool_name" {
