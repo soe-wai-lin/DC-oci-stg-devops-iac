@@ -41,6 +41,16 @@ output "stg_vcn_name" {
   value = oci_core_vcn.terra_vcn.display_name
 }
 
+output "airs_worker_node_image_id" {
+  value = local.airs_worker_node_image_id
+  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+}
+
+output "airs_system_node_image_id" {
+  value = local.airs_system_node_image_id
+  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+}
+
 
 # ##################
 # #### Database  ###
