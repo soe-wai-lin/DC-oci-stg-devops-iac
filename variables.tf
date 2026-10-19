@@ -998,7 +998,7 @@ variable "airs_node_cycling_enabled" {
 variable "airs_node_cycling_maximum_surge" {
   description = "Maximum additional new compute instances temporarily created during cycling. Supports integer or percentage."
   type        = string
-  default     = "10%"
+  default     = "100%"
 }
 
 variable "airs_node_cycling_maximum_unavailable" {
