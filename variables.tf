@@ -818,13 +818,13 @@ variable "airs_kubernetes_version" {
 variable "airs_system_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.1"
 }
 
 variable "airs_worker_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.1"
 }
 
 variable "airs_cluster_type" {
