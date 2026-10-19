@@ -805,26 +805,26 @@ variable "airs_worker_max_pods_per_node" {
 variable "airs_cluster_name" {
   description = "AIRS OKE cluster name."
   type        = string
-  default     = "stg-cluster"
+  default     = "Testing-cluster"
 }
 
 
 variable "airs_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.36.4"
+  default     = "v1.35.2"
 }
 
 variable "airs_system_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.36.4"
+  default     = "v1.35.2"
 }
 
 variable "airs_worker_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.36.4"
+  default     = "v1.35.2"
 }
 
 variable "airs_cluster_type" {
@@ -992,7 +992,7 @@ variable "airs_node_force_delete_after_grace_duration" {
 variable "airs_node_cycling_enabled" {
   description = "Enable node cycling for safer rolling replacement/updates."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "airs_node_cycling_maximum_surge" {
