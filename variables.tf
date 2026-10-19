@@ -992,7 +992,7 @@ variable "airs_node_force_delete_after_grace_duration" {
 variable "airs_node_cycling_enabled" {
   description = "Enable node cycling for safer rolling replacement/updates."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "airs_node_cycling_maximum_surge" {
