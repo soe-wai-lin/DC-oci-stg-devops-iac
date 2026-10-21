@@ -818,13 +818,13 @@ variable "airs_kubernetes_version" {
 variable "airs_system_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.4"
 }
 
 variable "airs_worker_node_kubernetes_version" {
   description = "OKE Kubernetes version for the control plane and node pools. Pin this explicitly for production."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.4"
 }
 
 variable "airs_cluster_type" {
@@ -883,7 +883,7 @@ variable "airs_system_availability_domain" {
 }
 
 variable "airs_system_node_image_id" {
-  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaah4effqc3u5edio4huibyous4aiyswruwvmi3h4uanhbnkcy2ll3a"
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatjvvawkzj5vgfwziypbxdv6xxp5zbc7hyf2zgsfzvyzqeow2h2ya"
 }
 
 #########################
@@ -891,7 +891,7 @@ variable "airs_system_node_image_id" {
 #########################
 
 variable "airs_worker_node_image_id" {
-  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaah4effqc3u5edio4huibyous4aiyswruwvmi3h4uanhbnkcy2ll3a"
+  default = "ocid1.image.oc1.ap-singapore-1.aaaaaaaatjvvawkzj5vgfwziypbxdv6xxp5zbc7hyf2zgsfzvyzqeow2h2ya"
 }
 
 variable "airs_worker_node_pool_name" {
@@ -992,7 +992,7 @@ variable "airs_node_force_delete_after_grace_duration" {
 variable "airs_node_cycling_enabled" {
   description = "Enable node cycling for safer rolling replacement/updates."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "airs_node_cycling_maximum_surge" {
