@@ -41,15 +41,15 @@ output "stg_vcn_name" {
   value = oci_core_vcn.terra_vcn.display_name
 }
 
-output "airs_worker_node_image_id" {
-  value = local.airs_worker_node_image_id
-  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
-}
+# output "airs_worker_node_image_id" {
+#   value = local.airs_worker_node_image_id
+#   description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+# }
 
-output "airs_system_node_image_id" {
-  value = local.airs_system_node_image_id
-  description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
-}
+# output "airs_system_node_image_id" {
+#   value = local.airs_system_node_image_id
+#   description = "this is automatically query node image ID, but for node, we are using hardcode node image ID , not to replace every time terraform apply"
+# }
 
 
 # ##################
@@ -133,44 +133,44 @@ output "airs_system_node_image_id" {
 # }
 
 
-##################
-##  Bucket      ##
-##################
+# ##################
+# ##  Bucket      ##
+# ##################
 
-output "stg_namespace" {
-  description = "Object Storage namespace used for the bucket."
-  value       = data.oci_objectstorage_namespace.ns.namespace
-}
+# output "stg_namespace" {
+#   description = "Object Storage namespace used for the bucket."
+#   value       = data.oci_objectstorage_namespace.ns.namespace
+# }
 
-output "stg_bucket_name" {
-  description = "Bucket name."
-  value       = oci_objectstorage_bucket.bucket.name
-}
+# output "stg_bucket_name" {
+#   description = "Bucket name."
+#   value       = oci_objectstorage_bucket.bucket.name
+# }
 
-output "stg_bucket_id" {
-  description = "Bucket identifier returned by OCI."
-  value       = data.oci_objectstorage_bucket.bucket.bucket_id
-}
+# output "stg_bucket_id" {
+#   description = "Bucket identifier returned by OCI."
+#   value       = data.oci_objectstorage_bucket.bucket.bucket_id
+# }
 
-output "stg_bucket_access_type" {
-  description = "Configured public access type."
-  value       = data.oci_objectstorage_bucket.bucket.access_type
-}
+# output "stg_bucket_access_type" {
+#   description = "Configured public access type."
+#   value       = data.oci_objectstorage_bucket.bucket.access_type
+# }
 
-output "stg_bucket_storage_tier" {
-  description = "Configured storage tier."
-  value       = data.oci_objectstorage_bucket.bucket.storage_tier
-}
+# output "stg_bucket_storage_tier" {
+#   description = "Configured storage tier."
+#   value       = data.oci_objectstorage_bucket.bucket.storage_tier
+# }
 
-output "stg_bucket_versioning" {
-  description = "Bucket versioning status."
-  value       = data.oci_objectstorage_bucket.bucket.versioning
-}
+# output "stg_bucket_versioning" {
+#   description = "Bucket versioning status."
+#   value       = data.oci_objectstorage_bucket.bucket.versioning
+# }
 
-output "stg_bucket_approximate_size" {
-  description = "Approximate total size in bytes of all objects in the bucket."
-  value       = data.oci_objectstorage_bucket.bucket.approximate_size
-}
+# output "stg_bucket_approximate_size" {
+#   description = "Approximate total size in bytes of all objects in the bucket."
+#   value       = data.oci_objectstorage_bucket.bucket.approximate_size
+# }
 
 # ##############
 # ### Vault  ###
