@@ -1347,12 +1347,12 @@ resource "oci_core_route_table" "private_rt" {
     description       = "Private subnet default route via NAT Gateway"
   }
 
-  # route_rules {
-  #   destination       = "172.16.0.0/16"
-  #   destination_type  = "CIDR_BLOCK"
-  #   network_entity_id = "ocid1.drg.oc1.ap-singapore-1.aaaaaaaaxgdjrcid2fvkvlrfrr2dibnk5nuw4pzlhqw376sok7nabwabul2q"
-  #   description       = "DR CIDR default route via DRG"
-  # }
+  route_rules {
+    destination       = "172.16.0.0/16"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = "ocid1.drg.oc1.ap-singapore-1.aaaaaaaaxgdjrcid2fvkvlrfrr2dibnk5nuw4pzlhqw376sok7nabwabul2q"
+    description       = "DR CIDR default route via DRG"
+  }
 
   freeform_tags = var.freeform_tags
 }
