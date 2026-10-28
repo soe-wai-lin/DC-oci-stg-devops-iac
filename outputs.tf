@@ -346,9 +346,9 @@ output "stg_vcn_name" {
 #   value       = oci_core_public_ip.apisix_cluster_lb_reserved_ip.ip_address
 # }
 
-output "default_rt" {
-  value = local.default_route_table.display_name
-}
+# output "default_rt" {
+#   value = local.default_route_table.display_name
+# }
 
 
 
