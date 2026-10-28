@@ -1366,12 +1366,22 @@ data "oci_core_route_tables" "existing" {
   vcn_id         = oci_core_vcn.terra_vcn.id
 }
 
+locals {
+  default_route_table = one([
+    for rt in data.oci_core_route_tables.existing.route_tables :
+    rt
+    if rt.id == oci_core_vcn.terra_vcn.default_route_table_id
+  ])
+}
+
 #--------------------------------------
 # Add Some Route into Default Table ---
 #--------------------------------------
 
 resource "oci_core_default_route_table" "default_rt" {
-  manage_default_resource_id = data.oci_core_route_tables.existing.id
+  # manage_default_resource_id = data.oci_core_route_tables.existing.id
+  manage_default_resource_id = local.default_route_table.id
+
 
   # Include all existing routes you want to retain.
   # Add the new DR route below.
