@@ -1357,6 +1357,33 @@ resource "oci_core_route_table" "private_rt" {
   freeform_tags = var.freeform_tags
 }
 
+#-------------------------------------
+# Check Default Route Table ----------
+#-------------------------------------
+
+data "oci_core_route_tables" "existing" {
+  compartment_id = oci_identity_compartment.net_compartment.id
+  vcn_id         = oci_core_vcn.terra_vcn.id
+}
+
+#--------------------------------------
+# Add Some Route into Default Table ---
+#--------------------------------------
+
+resource "oci_core_default_route_table" "default_rt" {
+  manage_default_resource_id = data.oci_core_route_tables.existing
+
+  # Include all existing routes you want to retain.
+  # Add the new DR route below.
+  route_rules {
+    destination       = "172.16.0.0/16"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = "ocid1.drg.oc1.ap-singapore-1.aaaaaaaaxgdjrcid2fvkvlrfrr2dibnk5nuw4pzlhqw376sok7nabwabul2q"
+    description       = "DR VCN route via DRG"
+  }
+  freeform_tags = var.freeform_tags
+}
+
 
 data "oci_core_services" "services" {}
 
