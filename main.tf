@@ -1371,7 +1371,7 @@ data "oci_core_route_tables" "existing" {
 #--------------------------------------
 
 resource "oci_core_default_route_table" "default_rt" {
-  manage_default_resource_id = data.oci_core_route_tables.existing
+  manage_default_resource_id = data.oci_core_route_tables.existing.id
 
   # Include all existing routes you want to retain.
   # Add the new DR route below.
